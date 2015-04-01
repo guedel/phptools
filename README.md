@@ -15,4 +15,5 @@ Sample password generator.
 gen-sqlcomp.php:
 Generate SQL code to compare 2 tables (or subqueries), with left only, right only, differences and equals results.
 
-
+php-line.php:
+A php console. Warning: is not safe and only for developpement.
