@@ -126,7 +126,8 @@ if ($etape >= ETAPE_RENDU) {
             $render->write($field->label);
             $render->writeln('</label></td>');
             $render->write('<td>');
-            $field->control->writeHtmlTag($render, $nomchamp, $field->id);
+            //$field->control->writeHtmlTag($render, $nomchamp, $field->id);
+            $field->control->writeHtmlTag($render, $nomchamp, $nomchamp);
             $render->writeln('</td>');
             $render->unindent();
             $render->writeln('</tr>');

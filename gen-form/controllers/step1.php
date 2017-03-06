@@ -24,10 +24,15 @@
  * THE SOFTWARE.
  */
 
+    $driver = '';
     $hostname = "localhost";
     $port = "";
     $username= "";
     $password = "";
+
+    if (isset($_REQUEST['driver'])) {
+        $driver = $_REQUEST['driver'];
+    }
 
     if (isset($_REQUEST["hote"])) {
         $hostname = $_REQUEST["hote"];

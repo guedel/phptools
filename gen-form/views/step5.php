@@ -46,7 +46,7 @@ if ($etape == ETAPE_ATTRIBUTS) {
 ?>
             <tr>
                 <td><?= $field->name ?></td>
-                <td><?= $field->control->type ?></td>
+                <td><?= $controles[get_class($field->control)] ?></td>
                 <td>
 <?php
         echo $field->control->getAttributesForm($field->id);

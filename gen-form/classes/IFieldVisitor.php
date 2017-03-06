@@ -3,7 +3,7 @@
     /*
      * The MIT License
      *
-     * Copyright 2016 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
+     * Copyright 2017 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -25,34 +25,10 @@
      */
 
     /**
-     * Description of Control
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class Control extends Widget
+    interface IFieldVisitor
     {
-        /**
-         * @property int $length
-         * @property string $unit
-         */
-
-        public $name;
-
-        protected function initAttributesList()
-        {
-            parent::initAttributesList();
-            $this->addAttribute(new Attribute('length', 'Longueur', 'int', null, false, 30));
-            $this->addAttribute(new Attribute('unit', 'Unité', 'enum', ['px','em','%'], false, 'px'));
-        }
-
-        /**
-         * Création du controle HTML en fonction des attributs
-         * @param string $name
-         * @param mixed $id
-         */
-        public function writeHtmlTag(CodeWriter $render, $name, $id)
-        {
-            $render->writeln('<input type="text" value="" name="'. $name . '" id="'. $id . '" />');
-        }
-
+        public function visitField(Field $f);
     }

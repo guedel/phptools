@@ -36,18 +36,15 @@
         public $len;
         public $prec;
         /**
-         * Libellé
-         * @var string
+         * @var string Libellé
          */
         public $label;
         /**
-         * Type de données
-         * @var string
+         * @var string Type de données
          */
         public $type;
         /**
-         *
-         * @var bool
+         * @var bool Sélectionné ?
          */
         public $selected = false;
         /**
@@ -63,6 +60,11 @@
             $this->type = $type;
             $this->len = $len;
             $this->prec = $prec;
-            $this->control = new Control('textbox');
+            $this->control = new ControlTextbox();;
+        }
+
+        public function accept(IFieldVisitor $v)
+        {
+            $v->visitField($this);
         }
     }

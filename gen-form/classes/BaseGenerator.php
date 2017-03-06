@@ -29,24 +29,134 @@
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    abstract class BaseGenerator
+    abstract class BaseGenerator implements IAttributeVisitor, IWidgetVisitor, IFieldVisitor
     {
-        public function do_textbox() {
+        /**
+         *
+         * @var CodeWriter
+         */
+        protected $writer = null;
+
+        /**
+         * Contient l'inscription des générateurs de contrôle
+         * @var array
+         */
+        private $register = array();
+
+
+        /**
+         *
+         * @param CodeWriter $writer
+         */
+        public function __construct(CodeWriter $writer = null)
+        {
+            if ($writer === null) {
+                $this->writer = new CodeWriter();
+            } else {
+                $this->writer = $writer;
+            }
+            $this->registerGenerators();
+            $this->prolog();
+        }
+
+        /**
+         * Génère la partie avant les contrôles
+         */
+        public abstract function prolog();
+
+        /**
+         * Génère la partie finale
+         */
+        public abstract function epilog();
+
+        /**
+         * @returns CodeWriter
+         */
+        public function finalize()
+        {
+            $this->epilog();
+            return $this->writer;
+        }
+
+
+        /**
+         * Inscription d'un générateur de contrôle
+         * @param string $name
+         * @param callable $fn
+         */
+        protected function registerGenerator($name, callable $fn)
+        {
+            $this->register[$name] = $fn;
+        }
+
+        /**
+         *
+         * @param object $o
+         */
+        protected function generate(object $o)
+        {
+            $found = false;
+            foreach ($this->register as $name => $fn) {
+                if ($name == get_class($o)) {
+                    $found = true;
+                    $fn($this, $o);
+                }
+            }
+            if (! $found ) {
+                $this->comment('no generator found for ' . get_class($o));
+            }
 
         }
-        public function do_dropdown() {
 
+        public function visitWidget(\Widget $w)
+        {
+            $this->generate($w);
         }
-        public function do_spin() {
 
+        public function visitField(\Field $f)
+        {
+            //$this->generate($f);
         }
-        public function do_checkbox() {
 
+        public function visitAttribute(\Attribute $a)
+        {
+            $this->generate($a);
         }
-        public function do_radio() {
 
+        /**
+         * Inscription des contrôles de base
+         */
+        protected function registerGenerators()
+        {
+            $this->registerGenerator(get_class(ControlButton::self), [get_class($this), 'genControlButton']);
+            $this->registerGenerator(get_class(ControlCheckbox::self), [get_class($this), 'genControlCheckbox']);
+            $this->registerGenerator(get_class(ControlDate::self), [get_class($this), 'genControlDate']);
+            $this->registerGenerator(get_class(ControlDropdown::self), [get_class($this), 'genControlDropdown']);
+            $this->registerGenerator(get_class(ControlHidden::self), [get_class($this), 'genControlHidden']);
+            $this->registerGenerator(get_class(ControlListbox::self), [get_class($this), 'genControlListbox']);
+            $this->registerGenerator(get_class(ControlRadio::self), [get_class($this), 'genControlRadio']);
+            $this->registerGenerator(get_class(ControlSpin::self), [get_class($this), 'genControlSpin']);
+            $this->registerGenerator(get_class(ControlTextarea::self), [get_class($this), 'genControlTextarea']);
+            $this->registerGenerator(get_class(ControlTextbox::self), [get_class($this), 'genControlTextbox']);
         }
-        public function do_button() {
-            
-        }
+
+
+        /**
+         * Procédure d'écriture de commentaire
+         */
+        protected abstract function comment($text);
+
+        /*
+         * Méthodes à mettre en oeuvre
+         */
+        public abstract function genControlButton(BaseGenerator $gen, ControlButton $c);
+        public abstract function genControlCheckbox(BaseGenerator $gen, ControlCheckbox $c);
+        public abstract function genControlDate(BaseGenerator $gen, ControlDate $c);
+        public abstract function genControlDropdown(BaseGenerator $gen, ControlDropdown $c);
+        public abstract function genControlHidden(BaseGenerator $gen, ControlHidden $c);
+        public abstract function genControlListbox(BaseGenerator $gen, ControlListbox $c);
+        public abstract function genControlRadio(BaseGenerator $gen, ControlRadio $c);
+        public abstract function genControlSpin(BaseGenerator $gen, ControlSpin $c);
+        public abstract function genControlTextarea(BaseGenerator $gen, ControlTextarea $c);
+        public abstract function genControlTextbox(BaseGenerator $gen, ControlTextbox $c);
     }

@@ -1,0 +1,103 @@
+﻿@startuml
+
+namespace controls {
+
+enum DataType {
+  dtMixed
+  dtInteger
+  dtFloat
+  dtString
+  dtObject
+}
+
+class Attribute {
+  + string name
+  + string label
+  + DataType type
+  + string extra
+  + bool required
+  + mixed default
+  + mixed value
+
+  + <<construct>> Attribute(name, label, type, extra, required, default)
+}
+note bottom: Determine un attribut d un controle
+
+
+abstract class Widget {
+	~attributes[]
+	+ <<construct>> Widget(attributes[])
+	+ setAttribute(string name, mixed value)
+	+ string getAttribute(string name)
+	+ initAttributeList()
+}
+
+interface IValuable {
+  + DataType getType()
+  + mixed eval(IWidgetVisitor visitor)
+}
+
+class Textbox {
+	+ <<contruct>> Textbox(attributes[])
+}
+
+class Checkbox {
+	+ <<contruct>> Checkbox(attributes[])
+}
+
+class Listbox {
+	+ <<contruct>> Listbox(attributes[])
+}
+
+Widget <|-- Textbox 
+IValuable <|-- Textbox 
+ Widget <|-- Checkbox 
+IValuable <|-- Checkbox 
+Widget <|-- Listbox 
+IValuable <|-- Listbox
+}
+
+namespace generation {
+  class CodeWriter {
+    - string current
+    - string lines[]
+    - int indent
+    + string spacer = '\\t'
+    
+    + <<construct>> CodeWriter(string spacer="\\t", string initialIndent = 0)
+    + indent()
+    + unindent()
+    + write(string text)
+    + writeln(string text)
+    + nl()
+    + string render()
+    + merge(CodeWriter writer)
+  }
+
+  enum OutputMode {
+    output_html
+    output_php5
+    output_symfony_form
+    output_ajax
+    output_text
+    output_twig_template
+    output_volt_template
+  }
+
+  class Generator {
+     
+    + <<construct>> Generator()
+    + register_control_generator(WidgetClass, WidgetWriter)
+  }
+
+  abstract class WidgetWriter {
+    - WidgetWriter next
+    
+    + WidgetWriter setNext(WidgetWriter writer)
+
+    + void render(Widget ctrl)
+  }
+
+}
+
+@enduml

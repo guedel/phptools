@@ -121,4 +121,12 @@
             }
             return $ret;
         }
+
+        public function merge(CodeWriter $writer)
+        {
+            if (strlen($this->current) > 0) $this->nl();
+            foreach ($writer->lines as $line) {
+                $this->lines[] = $line;
+            }
+        }
     }

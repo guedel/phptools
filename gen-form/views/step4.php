@@ -78,12 +78,14 @@ if ($etape == ETAPE_SELECTION_COL) {
                     <td><input name="lbl[<?= $id ?>]" type="text" value="<?= $field->label ?>" /></td>
                     <td><select name="ctl[<?= $id ?>]" >
 <?php
-                    foreach($controles as $ctl) {
-                            echo '<option';;
-                        if ($ctl == $field->control->type) {
-                            echo ' selected';
+                    foreach($controles as $class => $label) {
+                        //var_dump($field->control);
+                        //echo get_class($field->control);
+                        echo '<option value="', $class, '"';
+                        if ($class == trim(get_class($field->control))) {
+                            echo ' selected="selected"';
                         }
-                        echo '>', $ctl, '</option>', "\n";
+                        echo '>', $label, '</option>', "\n";
                     }
 ?>
                     </select></td>
@@ -109,7 +111,7 @@ if ($etape == ETAPE_SELECTION_COL) {
         }
 ?>
             <input type="hidden" name="lbl[<?= $id ?>]" value="<?= $field->label ?>" />
-            <input type="hidden" name="ctl[<?= $id ?>]" value="<?= $field->control->type ?>" />
+            <input type="hidden" name="ctl[<?= $id ?>]" value="<?= get_class($field->control) ?>" />
 <?php
     }
 ?>

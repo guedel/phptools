@@ -1,0 +1,17 @@
+@startuml
+
+namespace utils {
+
+class CodeWriter {
+	+ indent()
+	+ unindent()
+	+ write(string text)
+	+ writeln(string text)
+	+ nl()
+	+ string render()
+	+ merge(CodeWriter writer)
+}
+
+}
+
+@enduml

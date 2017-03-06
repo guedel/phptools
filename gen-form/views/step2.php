@@ -31,11 +31,11 @@ if ($etape == ETAPE_DATABASE) {
 <?php
         if (isset($cmdDatabases)) {
             foreach($cmdDatabases as $rowDatabase) {
-                echo '<option ';
-                if ($rowDatabase[0] == $databasename) {
-                    echo ' selected="selected"';
-                }
-                echo '>', $rowDatabase[0], '</option>';
+                echo '<option ',
+                    ($rowDatabase[0] == $databasename) ? ' selected="selected"': '',
+                    '>',
+                    $rowDatabase[0],
+                    '</option>';
             }
         }
 ?>

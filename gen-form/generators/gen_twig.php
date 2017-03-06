@@ -24,3 +24,17 @@
  * THE SOFTWARE.
  */
 
+    /**
+     * Générateur du code PHP
+     */
+    class gen_twig extends BaseGenerator
+    {
+        public function __construct(\CodeWriter $writer = null)
+        {
+            parent::__construct($writer);
+        }
+        protected function do_comment($text)
+        {
+        }
+
+    }

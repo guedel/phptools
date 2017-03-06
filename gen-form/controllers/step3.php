@@ -35,7 +35,19 @@
 		$request = $_REQUEST["requete"];
 	}
     if ($etape >= ETAPE_REQUETE) {
-        if ($cnx !== null) {
-            $cmdTables = $cnx->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$databasename'");
+        if ($driver == 'sqlite') {
+            try {
+                $cnx = new PDO("sqlite:$hostname/$databasename");
+                $cnx->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Lecture de la liste des tables
+                $cmdTables = $cnx->query("SELECT name AS TABLE_NAME FROM sqlite_master WHERE type='table'");
+            } catch (Exception $ex) {
+                $message = "Erreur de connection: " . $e->getMessage();
+                $cnx = null;
+            }
+        } else {
+            if ($cnx !== null) {
+                $cmdTables = $cnx->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$databasename'");
+            }
         }
     }

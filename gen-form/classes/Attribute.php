@@ -31,7 +31,13 @@
      */
     class Attribute
     {
+        /**
+         * @var string Nom de l'attribut
+         */
         public $name;
+        /**
+         * @var string Etiquette affichée
+         */
         public $label;
         public $type;
         public $extra;
@@ -39,14 +45,22 @@
         public $default;
         public $value;
 
+        const TYPE_ENUM = 'enum';       # enumération de valeurs
+        const TYPE_INT = 'int';         # valeur numérique entière
+        const TYPE_BOOL = 'bool';       # booléen
+        const TYPE_FLOAT = 'float';     # valeur décimale
+        const TYPE_STRING = 'string';   # texte
+        const TYPE_QUERY = 'query';     # requête dans la base qui ramène une liste de valeurs
+        const TYPE_OBJECT = 'object';   # un objet
+
         /**
          *
-         * @param type $name
-         * @param type $label
-         * @param type $type
-         * @param type $extra
-         * @param type $required
-         * @param type $default
+         * @param string $name
+         * @param string $label
+         * @param string $type
+         * @param string $extra
+         * @param bool $required
+         * @param mixed $default
          */
         public function __construct($name, $label, $type, $extra = null, $required = false, $default = null)
         {
@@ -88,10 +102,16 @@
             }
         }
 
+        /**
+         * Récupère le tag HTML pour la saisie de l'attribut
+         * @param type $owner
+         * @param type $index
+         * @return string
+         */
         public function getHtmlTag($owner, $index = null)
         {
             switch ($this->type) {
-                case 'enum':
+                case self::TYPE_ENUM:
                     $ret = '<select name="' . $this->getHtmlName($owner, $index) . '" >"';
                     foreach ($this->extra as $val) {
                         $ret .= '<option';
@@ -101,9 +121,9 @@
                         $ret .= '>' . $val . '</option>';
                     }
                     return $ret;
-                case 'int':
+                case self::TYPE_INT:
                     return '<input type="number" name="' . $this->getHtmlName($owner, $index) . '" value="' . $this->value . '" />';
-                case 'bool':
+                case self::TYPE_BOOL:
                     $ret =  '<input type="checkbox" name="'
                         . $this->getHtmlName($owner, $index)
                         . '" value="' . $index . '"';
@@ -111,6 +131,17 @@
                         $ret .= ' checked="checked"';
                     }
                     return $ret . '/>';
+                case self::TYPE_QUERY:
+                    $ret = '<select name="' . $this->getHtmlName($owner, $index) . '" >"';
+                    $qry = $this->extra;
+                    foreach($qry as $row) {
+                        $ret .= '<option';
+                        if ($$row[0] == $this->value) {
+                            $ret .= ' selected="selected"';
+                        }
+                        $ret .= '>' . isset($row[1]) ? $row[1] : $row[0] . '</option>';
+                    }
+                    return $ret;
                 default:
                     return '<input type="text" name="' . $this->getHtmlName($owner, $index) . '" value="' . $this->value . '" />';
             }

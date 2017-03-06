@@ -29,7 +29,27 @@
  */
 
 	if ($etape == ETAPE_AUTHENTIFICATION) {
+        $drivers = array(
+            "" => "veuillez choisir",
+            "mysql" => "MySql",
+            "sqlite" => "Sqlite",
+        )
 ?>
+    <tr>
+      <td><label for="">Système</label></td>
+      <td><select id="system" name="driver">
+<?php
+        foreach($drivers as $name => $label) {
+            if ($name == $driver) {
+                echo "<option selected='selected' value='$name'>$label</option>\n";
+            } else {
+                echo "<option value='$name'>$label</option>\n";
+            }
+        }
+?>
+        </select>
+      </td>
+    </tr>
     <tr>
         <td><label for="">Nom de l'hôte</label></td>
         <td><input type="text" id="hote" name="hote" size="64" value="<?=$hostname ?>" /></td>
@@ -51,6 +71,7 @@
 ?>
         <tr style="">
             <td>
+                <input type="hidden" id="driver" name="driver" value="<?=$driver ?>" />
                 <input type="hidden" id="hote" name="hote" value="<?=$hostname ?>" />
                 <input type="hidden" id="port" name="port" value="<?=$port ?>" />
                 <input type="hidden" id="user_name" name="user_name" value="<?= $username ?>" />

@@ -10,6 +10,7 @@
 
 require 'config.php';
 
+
 if (isset($_REQUEST['etape'])) {
 	$etape = $_REQUEST['etape'];
 }

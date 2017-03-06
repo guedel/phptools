@@ -38,7 +38,11 @@
 			$cmdFields = $cnx->query($request);
 		} elseif ($table_name) {
             //var_dump($table_name);
-			$cmdFields = $cnx->query("SELECT * FROM $databasename.$table_name");
+            if ($driver == 'sqlite') {
+                $cmdFields = $cnx->query("SELECT * FROM $table_name");
+            } else {
+                $cmdFields = $cnx->query("SELECT * FROM $databasename.$table_name");
+            }
 		} else {
 			$cmdFields = null;
 		}
@@ -60,7 +64,12 @@
                     $field_def[$idxField]->label = $_REQUEST['lbl'][$idxField];
                 }
                 if (isset($_REQUEST['ctl'][$idxField])) {
-                    $field_def[$idxField]->control = new Control($_REQUEST['ctl'][$idxField]);
+                    $classname = $_REQUEST['ctl'][$idxField];
+                    if (class_exists($classname)) {
+                        $field_def[$idxField]->control = new $classname();
+                    } else {
+                        $field_def[$idxField]->control = new Control();
+                    }
                 }
             }
             $cmdFields->closeCursor();
@@ -69,16 +78,16 @@
 
         // Définition de la liste des contrôles
         $controles = [
-            'button',
-            'checkbox',
-            'date',
-            'dropdown',
-            'hidden',
-            'listbox',
-            'radio',
-            'spin',
-            'textarea',
-            'textbox',
+            'ControlButton' => 'Button',
+            'ControlCheckbox' => 'Checkbox',
+            'ControlDate' => 'Date',
+            'ControlDropdown' => 'Dropdown',
+            'ControlHidden' => 'Hidden',
+            'ControlListbox' => 'Listbox',
+            'ControlRadio' => 'Radio',
+            'ControlSpin' => 'Spin',
+            'ControlTextarea' => 'Textarea',
+            'ControlTextbox' => 'Textbox',
         ];
         $unite = [
             'px', 'em', '%'

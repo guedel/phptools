@@ -31,18 +31,42 @@
             $databasename = $_REQUEST["database"];
         }
         try {
-            $connection_string = "mysql:host=$hostname";
-            if ($port) {
-                $connection_string .= ";port=$port";
+            $cnx = null;
+            switch ($driver) {
+                case 'mysql':
+                    $connection_string = "mysql:host=$hostname";
+                    if ($port) {
+                        $connection_string .= ";port=$port";
+                    }
+                    if ($username && $password) {
+                        $cnx = new PDO($connection_string, $username, $password);
+                    } elseif ($username) {
+                        $cnx = new PDO($connection_string, $username);
+                    } else {
+                        $cnx = new PDO($connection_string);
+                    }
+                    $cnx->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    break;
+                case 'sqlite':
+                    // C'est le nom de l'hote qui sert de répertoire de base
+                    // La connexion sera faite à l'étape suivante
+                    $cmdDatabases = array();
+                    if (is_dir($hostname)) {
+                        //var_dump($hostname);
+                        $files = scandir($hostname );
+                        //var_dump($files);
+                        foreach ($files as $file) {
+                            if (preg_match('%\.[db|sqlite]%', $file)) {
+                                $cmdDatabases[] = array($file);
+                            }
+                        }
+                        //var_dump($cmdDatabases);
+                    }
+
+                    //$connection_string = "sqlite:$databasename";
+                    //$cnx = new PDO($connection_string);
+                    break;
             }
-            if ($username && $password) {
-                $cnx = new PDO($connection_string, $username, $password);
-            } elseif ($username) {
-                $cnx = new PDO($connection_string, $username);
-            } else {
-                $cnx = new PDO($connection_string);
-            }
-            $cnx->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(Exception $e) {
             $message = "Erreur de connection: " . $e->getMessage();
             $cnx = null;
