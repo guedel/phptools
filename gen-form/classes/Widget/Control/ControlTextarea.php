@@ -23,30 +23,30 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
-     * Description of ControlTextbox
+     * Description of ControlTextarea
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
-     * @property string $placeholder
      */
-    class ControlTextbox extends Control
+    class ControlTextarea extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('placeholder', 'message de réserve', 'string', null, false) );
+            $this->addAttribute(new \Attribute('columns', 'Largeur', 'int', null, false));
+            $this->addAttribute(new \Attribute('rows', 'Hauteur', 'int', null, false));
         }
 
-        public function writeHtmlTag(CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $placeholder = $this->placeholder;
-            if ($placeholder) {
-                $strPlaceholder = 'placeholder="' . htmlspecialchars($placeholder) . '"';
-            } else {
-                $strPlaceholder = '';
-            }
-            $tag = sprintf('<input type="text" value="" name="%s" id="%s" %s/>', $name, $id, $strPlaceholder);
-            $render->writeln($tag);
+            // TODO Ajouter la hauteur et la largeur de la zone
+            $render->nl();
+            $render->indent();
+            $render->write(sprintf('<textarea id="%s" name="%s">', $this->id, $this->name));
+            $render->write($this->attributes['default']->value);
+            $render->writeln('</textarea>');
+            $render->unindent();
         }
     }

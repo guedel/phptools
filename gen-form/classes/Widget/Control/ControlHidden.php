@@ -23,21 +23,22 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
-     * Description of ControlDate
+     * Description of ControlHidden
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class ControlDate extends Control
+    class ControlHidden extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $render->writeln('<input type="date" value="" name="'. $name . '" id="'. $id . '" />');
+            $render->writeln('<input type="hidden" value="" name="'. $this->name . '" id="'. $this->id . '" />');
         }
     }

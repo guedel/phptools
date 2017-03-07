@@ -23,6 +23,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
      * Description of ControlListbox
@@ -34,13 +35,13 @@
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('height', 'hauteur', 'int', null, true));
-            $this->addAttribute(new Attribute('multiselect', 'multiselect', 'bool', null, false));
+            $this->addAttribute(new \Attribute('height', 'hauteur', 'int', null, true));
+            $this->addAttribute(new \Attribute('multiselect', 'multiselect', 'bool', null, false));
         }
 
-        public function writeHtmlTag(CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
             // TODO réaliser le code spécifique
-            parent::writeHtmlTag($render, $name, $id);
+            parent::writeHtmlTag($render);
         }
     }

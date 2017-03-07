@@ -93,17 +93,26 @@
          *
          * @param object $o
          */
-        protected function generate(object $o)
+        protected function generate(Widget $o)
         {
             $found = false;
             foreach ($this->register as $name => $fn) {
                 if ($name == get_class($o)) {
                     $found = true;
-                    $fn($this, $o);
+                    $fn($this->writer, $o);
                 }
             }
             if (! $found ) {
-                $this->comment('no generator found for ' . get_class($o));
+                if (isset($this->register['ControlTextbox'])) {
+                    // fallback -> textbox
+                    $this->comment('no generator found for \'' . get_class($o) . '\', so use of Textbox control');
+                    $fn = $this->register['ControlTextBox'];
+                    $fn($this, $o);
+                }
+                else {
+                    // sinon tant pis
+                    $this->comment('no generator found for ' . get_class($o));
+                }
             }
 
         }
@@ -128,16 +137,6 @@
          */
         protected function registerGenerators()
         {
-            $this->registerGenerator(get_class(ControlButton::self), [get_class($this), 'genControlButton']);
-            $this->registerGenerator(get_class(ControlCheckbox::self), [get_class($this), 'genControlCheckbox']);
-            $this->registerGenerator(get_class(ControlDate::self), [get_class($this), 'genControlDate']);
-            $this->registerGenerator(get_class(ControlDropdown::self), [get_class($this), 'genControlDropdown']);
-            $this->registerGenerator(get_class(ControlHidden::self), [get_class($this), 'genControlHidden']);
-            $this->registerGenerator(get_class(ControlListbox::self), [get_class($this), 'genControlListbox']);
-            $this->registerGenerator(get_class(ControlRadio::self), [get_class($this), 'genControlRadio']);
-            $this->registerGenerator(get_class(ControlSpin::self), [get_class($this), 'genControlSpin']);
-            $this->registerGenerator(get_class(ControlTextarea::self), [get_class($this), 'genControlTextarea']);
-            $this->registerGenerator(get_class(ControlTextbox::self), [get_class($this), 'genControlTextbox']);
         }
 
 
@@ -146,17 +145,4 @@
          */
         protected abstract function comment($text);
 
-        /*
-         * Méthodes à mettre en oeuvre
-         */
-        public abstract function genControlButton(BaseGenerator $gen, ControlButton $c);
-        public abstract function genControlCheckbox(BaseGenerator $gen, ControlCheckbox $c);
-        public abstract function genControlDate(BaseGenerator $gen, ControlDate $c);
-        public abstract function genControlDropdown(BaseGenerator $gen, ControlDropdown $c);
-        public abstract function genControlHidden(BaseGenerator $gen, ControlHidden $c);
-        public abstract function genControlListbox(BaseGenerator $gen, ControlListbox $c);
-        public abstract function genControlRadio(BaseGenerator $gen, ControlRadio $c);
-        public abstract function genControlSpin(BaseGenerator $gen, ControlSpin $c);
-        public abstract function genControlTextarea(BaseGenerator $gen, ControlTextarea $c);
-        public abstract function genControlTextbox(BaseGenerator $gen, ControlTextbox $c);
     }

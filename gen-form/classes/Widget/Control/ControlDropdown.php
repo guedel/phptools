@@ -23,27 +23,28 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
      * Description of ControlDropdown
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class ControlDropdown extends Control
+    class ControlDropdown extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('source_type', 'type de source', 'enum', ['list','query'], true, 'list'));
-            $this->addAttribute(new Attribute('source_value', 'source', 'text', null, true));
-            $this->addAttribute(new Attribute('source_key', 'champ clef', 'text', null, false));
-            $this->addAttribute(new Attribute('source_label', 'champ étiquette', 'text', null, false));
-            $this->addAttribute(new Attribute('empty_option', 'élément vide', 'bool', null, false, true ));
+            $this->addAttribute(new \Attribute('source_type', 'type de source', 'enum', ['list','query'], true, 'list'));
+            $this->addAttribute(new \Attribute('source_value', 'source', 'text', null, true));
+            $this->addAttribute(new \Attribute('source_key', 'champ clef', 'text', null, false));
+            $this->addAttribute(new \Attribute('source_label', 'champ étiquette', 'text', null, false));
+            $this->addAttribute(new \Attribute('empty_option', 'élément vide', 'bool', null, false, true ));
         }
 
-        public function writeHtmlTag(CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $render->writeln('<select name="' . $name . '" id="' . $id . '">');
+            $render->writeln('<select name="' . $this->name . '" id="' . $this->id . '">');
             $render->indent();
             if ($this->source_type == 'list') {
                 $source_value = $this->source_value;

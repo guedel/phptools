@@ -32,7 +32,7 @@
     class Widget
     {
         /**
-         * @var string
+         * @var mixed identifiant
          */
         public $id = null;
 
@@ -41,6 +41,11 @@
          * @var \Attribute
          */
         protected $attributes = [];
+
+        /**
+         * @var \Widget liste des éléments enfants
+         */
+        protected $childs = [];
 
         public function __construct()
         {
@@ -79,6 +84,11 @@
             //$this->addAttribute(new Attribute('id', 'Identifiant', 'string', null, false, 30));
         }
 
+        /**
+         *
+         * @param mixed $index
+         * @return string
+         */
         public function getAttributesForm($index)
         {
             $ret = '<table style="border: solid black thin">';
@@ -120,14 +130,47 @@
          * @param type $name
          * @param type $id
          */
-        public function writeHtmlTag(CodeWriter $render, $name, $id)
+        public function writeHtmlTag(CodeWriter $render)
         {
-            $render->writeln('<!-- wiget vide -->');
+            if (count($this->childs) > 0) {
+                $render->writeln('<div id="' . $this->id .'">');
+                $render->indent();
+                $this->writeChildsTag($render);
+                $render->unindent();
+                $render->writeln('</div>');
+            } else {
+                $render->write('<span id="' . $this->id . '"/>');
+            }
+        }
+
+        public function writeChildsTag(CodeWriter $render)
+        {
+            foreach ($this->childs as $child) {
+                $child->writeHtmlTag($render);
+            }
         }
 
         public function accept(IWidgetVisitor $visitor)
         {
             $visitor->visitWidget($this);
         }
+
+        /**
+         * @param Widget $child
+         */
+        public function appendChild(Widget $child)
+        {
+            $this->childs[] = $child;
+        }
+
+        /**
+         * Retourne la liste des éléments enfants s'ils existent
+         * @return array|Widget
+         */
+        public function getChilds()
+        {
+            return $this->childs;
+        }
+
 
     }

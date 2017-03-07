@@ -23,25 +23,31 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
-     * Description of ControlCheckbox
+     * Description of ControlTextbox
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
+     * @property string $placeholder
      */
-    class ControlCheckbox extends Control
+    class ControlTextbox extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('checked', 'Coché', 'bool', false, false));
-            $this->addAttribute(new Attribute('value', 'Valeur', 'text', null, false));
+            $this->addAttribute(new \Attribute('placeholder', 'message de réserve', 'string', null, false) );
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $checked = ($this->checked) ? " checked='checked'" : "";
-            $render->write('<input type="checkbox" id="' . $id . '" name="' . $name .'" value="'. $this->value . '" ' . $checked . '/>');
+            $placeholder = $this->placeholder;
+            if ($placeholder) {
+                $strPlaceholder = 'placeholder="' . htmlspecialchars($placeholder) . '"';
+            } else {
+                $strPlaceholder = '';
+            }
+            $tag = sprintf('<input type="text" value="" name="%s" id="%s" %s/>', $this->name, $this->id, $strPlaceholder);
+            $render->writeln($tag);
         }
-
     }

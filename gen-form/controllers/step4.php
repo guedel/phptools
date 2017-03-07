@@ -68,7 +68,7 @@
                     if (class_exists($classname)) {
                         $field_def[$idxField]->control = new $classname();
                     } else {
-                        $field_def[$idxField]->control = new Control();
+                        $field_def[$idxField]->control = new \Widget\Control();
                     }
                 }
             }
@@ -78,16 +78,16 @@
 
         // Définition de la liste des contrôles
         $controles = [
-            'ControlButton' => 'Button',
-            'ControlCheckbox' => 'Checkbox',
-            'ControlDate' => 'Date',
-            'ControlDropdown' => 'Dropdown',
-            'ControlHidden' => 'Hidden',
-            'ControlListbox' => 'Listbox',
-            'ControlRadio' => 'Radio',
-            'ControlSpin' => 'Spin',
-            'ControlTextarea' => 'Textarea',
-            'ControlTextbox' => 'Textbox',
+            \Widget\Control\ControlButton::class => 'Button',
+            \Widget\Control\ControlCheckbox::class => 'Checkbox',
+            \Widget\Control\ControlDate::class => 'Date',
+            \Widget\Control\ControlDropdown::class => 'Dropdown',
+            \Widget\Control\ControlHidden::class => 'Hidden',
+            \Widget\Control\ControlListbox::class => 'Listbox',
+            \Widget\Control\ControlRadio::class => 'Radio',
+            \Widget\Control\ControlSpin::class => 'Spin',
+            \Widget\Control\ControlTextarea::class => 'Textarea',
+            \Widget\Control\ControlTextbox::class => 'Textbox',
         ];
         $unite = [
             'px', 'em', '%'

@@ -23,21 +23,26 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
-     * Description of ControlHidden
+     * Description of ControlCheckbox
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class ControlHidden extends Control
+    class ControlCheckbox extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
+            $this->addAttribute(new \Attribute('checked', 'Coché', 'bool', false, false));
+            $this->addAttribute(new \Attribute('value', 'Valeur', 'text', null, false));
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $render->writeln('<input type="hidden" value="" name="'. $name . '" id="'. $id . '" />');
+            $checked = ($this->checked) ? " checked='checked'" : "";
+            $render->write('<input type="checkbox" id="' . $this->id . '" name="' . $this->name .'" value="'. $this->value . '" ' . $checked . '/>');
         }
+
     }

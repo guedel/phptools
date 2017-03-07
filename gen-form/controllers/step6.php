@@ -27,54 +27,15 @@
     $mode_gen = 'HTML';
 
 /**
- *
- * @global CodeWriter $render
- * @param Field $field
- * @param string $nomchamp
- */
-function saisie_html($field, $nomchamp) {
-    global $render;
-    switch ($field->control['type']) {
-        case 'spin' :
-            $render->write('<input id="' . $nomchamp . '" name="' . $nomchamp .'" type="number" value="1" />');
-            break;
-        case 'dropdown':
-            $render->nl();
-            $render->indent();
-            $render->writeln('<select id="' . $nomchamp . '" name="' . $nomchamp .'">');
-            $render->indent();
-            $render->writeln('<option>Option 1</option>');
-            $render->writeln('<option>Option 2</option>');
-            $render->unindent();
-            $render->writeln('</select>');
-            $render->unindent();
-            break;
-        case 'textarea':
-            $render->nl();
-            $render->indent();
-            $render->write('<textarea>');
-            $render->writeln('</textarea>');
-            $render->unindent();
-            break;
-        case 'date':
-            $render->write('<input type="date" id="' . $nomchamp . '" name="' . $nomchamp .'" value="" />');
-            break;
-        case 'checkbox':
-            $render->write('<input type="checkbox" id="' . $nomchamp . '" name="' . $nomchamp .'" value="" />');
-            break;
-        default:
-            $render->write('<input id="' . $nomchamp . '" name="' . $nomchamp .'" type="text" />');
-            break;
-    }
-}
-
-/**
  * Crée des valeurs bidon en fonction du type de la donnée
  * @param array $field
  */
 function valeur_html(Field $field)
 {
     $len = $field->len;
+    if ($len < 0) {
+        $len = 10;
+    }
 
     switch ($field->type) {
         case 'LONG':
@@ -115,7 +76,7 @@ if ($etape >= ETAPE_RENDU) {
     if ($rendering == 'simple') {
         $render->writeln("<table>");
         $render->indent();
-        //$field = new Field($id, $name, $type, $len, $prec);
+        $gen = new Generator\GenHTML($render);
         foreach ($field_def as $field) {
             if (! $field->selected) continue;
             $nom = $field->name;
@@ -127,7 +88,11 @@ if ($etape >= ETAPE_RENDU) {
             $render->writeln('</label></td>');
             $render->write('<td>');
             //$field->control->writeHtmlTag($render, $nomchamp, $field->id);
-            $field->control->writeHtmlTag($render, $nomchamp, $nomchamp);
+            //$field->control->writeHtmlTag($render, $nomchamp, $nomchamp);
+            $control = $field->control;
+            $control->id = $nomchamp;
+            $control->name = $nomchamp;
+            $gen->visitWidget($control);
             $render->writeln('</td>');
             $render->unindent();
             $render->writeln('</tr>');
@@ -141,6 +106,7 @@ if ($etape >= ETAPE_RENDU) {
         // Ligne de titre
         $render->writeln('<tr>');
         $render->indent();
+        $gen = new Generator\GenHTML($render);
         foreach($field_def as $field) {
             if (! $field->selected) continue;
             $render->write('<th>');
@@ -158,7 +124,11 @@ if ($etape >= ETAPE_RENDU) {
             if (! $field->selected) continue;
             $render->write('<td>');
             $nomchamp = 'fld_' . $field->name;
-            $field->control->writeHtmlTag($render, $nomchamp, $field->id);
+            //$field->control->writeHtmlTag($render, $nomchamp, $field->id);
+            $control = $field->control;
+            $control->id = $nomchamp;
+            $control->name = $nomchamp;
+            $gen->visitWidget($control);
             $render->writeln('</td>');
         }
         $render->writeln('<th><input type="button" value="save" /></th>');

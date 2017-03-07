@@ -23,6 +23,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
      * Description of ControlRadio
@@ -33,17 +34,17 @@
      * @property bool $keys Indique des clefs présentes dans la liste
      * @property mixed $default Valeur par défaut à utiliser
      */
-    class ControlRadio extends Control
+    class ControlRadio extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('values', 'Valeurs', 'text', null, true));
-            $this->addAttribute(new Attribute('keys', 'Clefs présentes', 'bool', null, false, false));
-            $this->addAttribute(new Attribute('default', 'Valeur par défaut', null, false));
+            $this->addAttribute(new \Attribute('values', 'Valeurs', 'text', null, true));
+            $this->addAttribute(new \Attribute('keys', 'Clefs présentes', 'bool', null, false, false));
+            $this->addAttribute(new \Attribute('default', 'Valeur par défaut', null, false));
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
             $keys = $this->keys;
             $src_values = explode(',', $this->values);
@@ -64,7 +65,7 @@
             $render->indent();
             foreach($values as $key => $value) {
                 $checked = ($key == $this->default) ? ' checked="checked"' : '';
-                $tag = sprintf('<input type="radio" id="%s_%s" name="%s" value="%s" %s>%s</input>', $name, $key, $name, $key, $checked, $value);
+                $tag = sprintf('<input type="radio" id="%s_%s" name="%s" value="%s" %s>%s</input>', $this->id, $key, $this->name, $key, $checked, $value);
                 $render->writeln('<li>');
                 $render->indent();
                 $render->writeln($tag);

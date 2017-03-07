@@ -23,6 +23,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
      * Description of ControlSpin
@@ -32,16 +33,16 @@
      * @property int $min_value
      * @property int $max_value
      */
-    class ControlSpin extends ControlTextbox
+    class ControlSpin extends \Widget\Control\ControlTextbox
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('min_value', 'valeur mini', 'int', null, false));
-            $this->addAttribute(new Attribute('max_value', 'valeur maxi', 'int', null, false));
+            $this->addAttribute(new \Attribute('min_value', 'valeur mini', 'int', null, false));
+            $this->addAttribute(new \Attribute('max_value', 'valeur maxi', 'int', null, false));
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
             $extra = '';
             $valeur = 1;
@@ -52,6 +53,6 @@
             if ($this->max_value !== null) {
                 $extra .= sprintf('max="%s"', $this->max_value);
             }
-            $render->write(sprintf('<input id="%s" name="%s" type="number" value="%s" %s/>', $id, $name, $valeur, $extra));
+            $render->write(sprintf('<input id="%s" name="%s" type="number" value="%s" %s/>', $this->id, $this->name, $valeur, $extra));
         }
     }

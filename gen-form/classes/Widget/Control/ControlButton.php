@@ -24,6 +24,7 @@
      * THE SOFTWARE.
      */
 
+    namespace Widget\Control;
     /**
      * Description of ControlButton
      *
@@ -31,16 +32,16 @@
      *
      * @property string $text Le texte du bouton
      */
-    class ControlButton extends Control
+    class ControlButton extends \Widget\Control
     {
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('text', 'Texte du bouton', 'text',  null, true));
+            $this->addAttribute(new \Attribute('text', 'Texte du bouton', 'text',  null, true));
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $render->writeln('<input type="button" value="" name="'. $name . '" id="'. $id . '" />');
+            $render->writeln('<input type="button" value="" name="'. $this->name . '" id="'. $this->id . '" />');
         }
     }

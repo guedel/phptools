@@ -23,13 +23,78 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-    class gen_volt extends BaseGenerator
+    namespace Generator;
+
+    class GenVolt extends \BaseGenerator
     {
         public function __construct(\CodeWriter $writer = null)
         {
             parent::__construct($writer);
         }
-        protected function do_comment($text)
+
+        protected function comment($text)
         {
+
         }
+
+        public function epilog()
+        {
+
+        }
+
+        public function genControlButton(\CodeWriter $writer, \ControlButton $c)
+        {
+
+        }
+
+        public function genControlCheckbox(\CodeWriter $writer, \ControlCheckbox $c)
+        {
+
+        }
+
+        public function genControlDate(\CodeWriter $writer, \ControlDate $c)
+        {
+
+        }
+
+        public function genControlDropdown(\CodeWriter $writer, \ControlDropdown $c)
+        {
+
+        }
+
+        public function genControlHidden(\CodeWriter $writer, \ControlHidden $c)
+        {
+
+        }
+
+        public function genControlListbox(\CodeWriter $writer, \ControlListbox $c)
+        {
+
+        }
+
+        public function genControlRadio(\CodeWriter $writer, \ControlRadio $c)
+        {
+
+        }
+
+        public function genControlSpin(\CodeWriter $writer, \ControlSpin $c)
+        {
+
+        }
+
+        public function genControlTextarea(\CodeWriter $writer, \ControlTextarea $c)
+        {
+
+        }
+
+        public function genControlTextbox(\CodeWriter $writer, \ControlTextbox $c)
+        {
+            $gen->writer->write('{{' . '}}');
+        }
+
+        public function prolog()
+        {
+
+        }
+
     }

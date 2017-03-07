@@ -3,7 +3,7 @@
     /*
      * The MIT License
      *
-     * Copyright 2017 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
+     * Copyright 2016 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,41 @@
      * THE SOFTWARE.
      */
 
+    namespace Widget;
+
     /**
-     * Description of ControlTextarea
+     * Description of Control
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class ControlTextarea extends Control
+    class Control extends \Widget
     {
+        /**
+         * @property int $length
+         * @property string $unit
+         */
+
+        /**
+         *
+         * @var string
+         */
+        public $name;
+
         protected function initAttributesList()
         {
             parent::initAttributesList();
-            $this->addAttribute(new Attribute('columns', 'Largeur', 'int', null, false));
-            $this->addAttribute(new Attribute('rows', 'Hauteur', 'int', null, false));
+            $this->addAttribute(new \Attribute('length', 'Longueur', 'int', null, false, 30));
+            $this->addAttribute(new \Attribute('unit', 'Unité', 'enum', ['px','em','%'], false, 'px'));
         }
 
-        public function writeHtmlTag(\CodeWriter $render, $name, $id)
+        /**
+         * Création du controle HTML en fonction des attributs
+         * @param string $name
+         * @param mixed $id
+         */
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            // TODO Ajouter la hauteur et la largeur de la zone
-            $render->nl();
-            $render->indent();
-            $render->write(sprintf('<textarea id="%s" name="%s">', $id, $name));
-            $render->write($this->attributes['default']->value);
-            $render->writeln('</textarea>');
-            $render->unindent();
+            $render->writeln('<input type="text" value="" name="'. $this->name . '" id="'. $this->id . '" />');
         }
+
     }

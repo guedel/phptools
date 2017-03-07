@@ -3,7 +3,7 @@
     /*
      * The MIT License
      *
-     * Copyright 2016 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
+     * Copyright 2017 Guillaume de Lestanville <guillaume.delestanville@proximit.fr>.
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -23,48 +23,22 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
      * THE SOFTWARE.
      */
+    namespace Widget\Control;
 
     /**
-     * Description of Field
+     * Description of ControlDate
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class Field
+    class ControlDate extends \Widget\Control
     {
-        public $id = 0;
-        public $name;
-        public $len;
-        public $prec;
-        /**
-         * @var string Libellé
-         */
-        public $label;
-        /**
-         * @var string Type de données
-         */
-        public $type;
-        /**
-         * @var bool Sélectionné ?
-         */
-        public $selected = false;
-        /**
-         * Informations sur le contrôle associé
-         * @var \Control
-         */
-        public $control = null;
-
-        public function __construct($id, $name, $type, $len, $prec)
+        protected function initAttributesList()
         {
-            $this->id = $id;
-            $this->name = $this->label = $name;
-            $this->type = $type;
-            $this->len = $len;
-            $this->prec = $prec;
-            $this->control = new \Widget\Control\ControlTextbox();
+            parent::initAttributesList();
         }
 
-        public function accept(IFieldVisitor $v)
+        public function writeHtmlTag(\CodeWriter $render)
         {
-            $v->visitField($this);
+            $render->writeln('<input type="date" value="" name="'. $this->name . '" id="'. $this->id . '" />');
         }
     }

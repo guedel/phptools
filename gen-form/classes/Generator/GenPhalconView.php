@@ -28,72 +28,71 @@
     /**
      * Générateur du code PHP avec les assistants de Phalcon
      */
-    class gen_PHP extends BaseGenerator
+    class GenPhalconView extends BaseGenerator
     {
-        public function __construct(CodeWriter $writer = null)
-        {
-            parent::__construct($writer);
-        }
-
-        protected function do_button(Control $control)
-        {
-
-        }
-
-        protected function do_checkbox(Control $control)
-        {
-
-        }
-
-        protected function do_comment($text)
+        protected function comment($text)
         {
             $this->writer->writeln('// ' . $text);
-        }
-
-        protected function do_date(Control $control)
-        {
-
-        }
-
-        protected function do_dropdown(Control $control)
-        {
-
-        }
-
-        protected function do_hidden(Control $control)
-        {
-
-        }
-
-        protected function do_listbox(Control $control)
-        {
-
-        }
-
-        protected function do_radio(Control $control)
-        {
-
-        }
-
-        protected function do_spin(Control $control)
-        {
-
-        }
-
-        protected function do_textarea(Control $control)
-        {
-
-        }
-
-        protected function do_textbox(Control $control)
-        {
-
         }
 
         public function prolog()
         {
             $this->writer->writeln('<?php');
             $this->writer->indent();
+        }
+
+        public function epilog()
+        {
+
+        }
+
+        public function genControlButton(\BaseGenerator $gen, \ControlButton $c)
+        {
+
+        }
+
+        public function genControlCheckbox(\BaseGenerator $gen, \ControlCheckbox $c)
+        {
+
+        }
+
+        public function genControlDate(\BaseGenerator $gen, \ControlDate $c)
+        {
+
+        }
+
+        public function genControlDropdown(\BaseGenerator $gen, \ControlDropdown $c)
+        {
+
+        }
+
+        public function genControlHidden(\BaseGenerator $gen, \ControlHidden $c)
+        {
+
+        }
+
+        public function genControlListbox(\BaseGenerator $gen, \ControlListbox $c)
+        {
+
+        }
+
+        public function genControlRadio(\BaseGenerator $gen, \ControlRadio $c)
+        {
+
+        }
+
+        public function genControlSpin(\BaseGenerator $gen, \ControlSpin $c)
+        {
+
+        }
+
+        public function genControlTextarea(\BaseGenerator $gen, \ControlTextarea $c)
+        {
+
+        }
+
+        public function genControlTextbox(\BaseGenerator $gen, \ControlTextbox $c)
+        {
         }
 
     }

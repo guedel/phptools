@@ -23,80 +23,79 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+    namespace Generator;
 
     /**
      * Générateur du code PHP
      */
-    class genPHP extends BaseGenerator
+    class GenTwig extends \BaseGenerator
     {
-        public function __construct(CodeWriter $writer = null)
+        public function __construct(\CodeWriter $writer = null)
         {
             parent::__construct($writer);
         }
 
         protected function comment($text)
         {
-            $this->writer->writeln('// ' . $text);
-        }
-
-        public function prolog()
-        {
-            $this->writer->writeln('<?php');
-            $this->writer->indent();
+            $this->writer->write('{#' . $text . '#}');
         }
 
         public function epilog()
         {
-            $this->writer->unindent();
+
         }
 
-        public function genControlButton(\BaseGenerator $gen, \ControlButton $c)
+        public function genControlButton(\CodeWriter $writer, \ControlButton $c)
         {
 
         }
 
-        public function genControlCheckbox(\BaseGenerator $gen, \ControlCheckbox $c)
+        public function genControlCheckbox(\CodeWriter $writer, \ControlCheckbox $c)
         {
 
         }
 
-        public function genControlDate(\BaseGenerator $gen, \ControlDate $c)
+        public function genControlDate(\CodeWriter $writer, \ControlDate $c)
         {
 
         }
 
-        public function genControlDropdown(\BaseGenerator $gen, \ControlDropdown $c)
+        public function genControlDropdown(\CodeWriter $writer, \ControlDropdown $c)
         {
 
         }
 
-        public function genControlHidden(\BaseGenerator $gen, \ControlHidden $c)
+        public function genControlHidden(\CodeWriter $writer, \ControlHidden $c)
         {
 
         }
 
-        public function genControlListbox(\BaseGenerator $gen, \ControlListbox $c)
+        public function genControlListbox(\CodeWriter $writer, \ControlListbox $c)
         {
 
         }
 
-        public function genControlRadio(\BaseGenerator $gen, \ControlRadio $c)
+        public function genControlRadio(\CodeWriter $writer, \ControlRadio $c)
         {
 
         }
 
-        public function genControlSpin(\BaseGenerator $gen, \ControlSpin $c)
+        public function genControlSpin(\CodeWriter $writer, \ControlSpin $c)
         {
 
         }
 
-        public function genControlTextarea(\BaseGenerator $gen, \ControlTextarea $c)
+        public function genControlTextarea(\CodeWriter $writer, \ControlTextarea $c)
         {
 
         }
 
-        public function genControlTextbox(\BaseGenerator $gen, \ControlTextbox $c)
+        public function genControlTextbox(\CodeWriter $writer, \ControlTextbox $c)
+        {
+
+        }
+
+        public function prolog()
         {
 
         }
