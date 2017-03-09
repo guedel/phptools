@@ -34,12 +34,11 @@
 
         protected function comment($text)
         {
-
+            $this->writer->write('{#' . $text . '#}');
         }
 
         public function epilog()
         {
-
         }
 
         /**

@@ -185,5 +185,14 @@
             return $this->childs;
         }
 
-
+        protected static function openTag($tag, array $attributes = null)
+        {
+            $ret = '<' . $tag;
+            if ($attributes !== null) {
+                foreach ($attributes as $key => $value) {
+                    $ret .= sprintf(' %s="%s"', $key, htmlentities($value));
+                }
+            }
+            return $ret;
+        }
     }
