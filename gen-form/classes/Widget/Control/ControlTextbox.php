@@ -33,10 +33,10 @@
      */
     class ControlTextbox extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('placeholder', 'message de réserve', 'string', null, false) );
+            parent::initOptionsList();
+            $this->addOption(new \Option('placeholder', 'message de réserve', 'string', null, false) );
         }
 
         public function writeHtmlTag(\CodeWriter $render)

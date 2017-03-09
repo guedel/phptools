@@ -29,7 +29,7 @@
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class Attribute
+    class Option
     {
         /**
          * @var string Nom de l'attribut

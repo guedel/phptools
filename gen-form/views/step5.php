@@ -40,7 +40,7 @@ if ($etape == ETAPE_ATTRIBUTS) {
     //$field = new Field();
     foreach($field_def as $field) {
         if (! $field->selected) {
-            $field->control->storeAttributes($field->id);
+            $field->control->storeOptions($field->id);
             continue;
         }
 ?>
@@ -49,7 +49,7 @@ if ($etape == ETAPE_ATTRIBUTS) {
                 <td><?= $controles[get_class($field->control)] ?></td>
                 <td>
 <?php
-        echo $field->control->getAttributesForm($field->id);
+        echo $field->control->getOptionsForm($field->id);
 ?>
                 </td>
             </tr>
@@ -73,7 +73,7 @@ if ($etape == ETAPE_ATTRIBUTS) {
 <?php
     foreach ($field_def as $field) {
         $id = $field->id;
-        $field->control->storeAttributes($id);
+        $field->control->storeOptions($id);
     }
 ?>
         <input type="hidden" name="rendering" value="<?= $rendering ?>" />

@@ -34,10 +34,10 @@
      */
     class ControlButton extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('text', 'Texte du bouton', 'text',  null, true));
+            parent::initOptionsList();
+            $this->addOption(new \Option('text', 'Texte du bouton', 'text',  null, true));
         }
 
         public function writeHtmlTag(\CodeWriter $render)

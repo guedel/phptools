@@ -30,7 +30,7 @@
 
 //if ($etape >= ETAPE_ATTRIBUTS) {
     foreach($field_def as $field) {
-        $field->control->retrieveAttributes($field->id);
+        $field->control->retrieveOptions($field->id);
         /** @var $field Field */
 
     }

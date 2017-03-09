@@ -1,0 +1,109 @@
+algorithme stratégie_stockage_options_par_pont
+début
+    /*
+     * Principe de l'algorithme:
+     * 
+    */
+    énumération TypeDonnéee
+    début
+        "quelconque"
+        "énuméré"
+        "texte"
+        "entier"
+        "décimal"
+        "booléen"
+        "requete"
+        "objet"
+    fin
+
+    {abstraite}
+    classe StockageOption
+    début
+        procédure écrire(option: Option);
+        procédure lire(option : référence de Option);
+    fin
+    
+    /*
+     * Dans cette classe on crée un contrôle pour saisir la valeur de l'option
+    */
+    classe StockageOptionSaisieHtml étend StockageOption
+    début
+        var visible : booléen
+        
+        {public}
+        constructeur StockageOptionSaisieHtml(visible : booléen = vrai)
+        début
+            ceci.visible = visible
+        fin
+        
+        {privé}
+        fonction getNomHtml(nom : chaine): chaine
+        début
+            retourne nom
+        fin
+    
+        {publique}
+        procédure écrire(option: Option)
+        début
+            selon option.typeDonnée
+                cas "texte" alors
+                    // création Textbox
+                cas "entier" alors
+                    // création Spin
+                cas "décimal" alors
+                    // Textbox
+                cas "booléen" alors
+                    // checkbox
+                cas "énuméré" alors
+                    // dropdown
+                ...
+           finselon ;
+        fin
+        
+        {publique}
+        procédure lire(option : référence de Option)
+        début
+            var nom_utilisé : chaine <- ceci.getNomHtml(option.nom)
+            si existe _requete[nom_utilisé] alors
+                option.valeur <- _requete[nom_utilisé]
+        fin
+    fin
+    
+    classe StockageOptionEnBase étend StockageOption
+    début
+        {publique}
+        procédure écrire(option: Option)
+        début
+            tableOption.insère option.nom, option.typeDonnée, option.valeur
+        fin
+
+        {publique}
+        procédure lire(option : référence de Option)
+        début
+            tableOption.lire option.valeur, option.typeDonnée où id=option.nom
+        fin
+    fin
+    
+    {abstraite}
+    classe Option 
+    début
+        {publique}
+        var nom : chaine
+        var typeDonnée : TypeDonnée
+        var valeur: quelconque
+        
+        {privée}
+        var controle : Controle
+        
+        {publique}
+        constructeur Option(un_nom: chaine, un_type : TypeDonnée)
+        début
+            ceci.nom <- un_nom;
+            ceci.typeDonnée <- un_type;
+        fin
+        
+        procédure enregistrer();
+        procédure récupérer();
+        
+    fin
+fin

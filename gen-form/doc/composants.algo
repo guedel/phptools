@@ -1,0 +1,105 @@
+paquet composants
+début
+    {abstraite}
+    classe Composant
+    début
+    fin
+
+    classe Fenetre
+    début
+    fin
+    
+    classe Vue
+    début
+    fin
+
+    classe Conteneur
+    début
+    fin
+
+    {publique, abstraite}
+    interface IStockageAdaptateur
+    début
+        procédure écrire(clé : chaine, valeur : quelconque, défaut : quelconque = null);
+        procédure lire(clé : chaine, valeur : référence de quelconque, défaut : quelconque = null);
+    fin
+    
+    énumération TypeDonnéee
+    début
+        "quelconque"
+        "texte"
+        "entier"
+        "décimal"
+        "booléen"
+        "requete"
+        "objet"
+    fin
+
+    classe Option
+    début
+        { privée }
+        variable
+            nom : chaine
+            libellé: chaine
+            typeDonnee : TypeDonnée
+            requis: booléen
+            défaut: quelconque
+            valeur: quelconque
+            // imformation complémentaire en fonction du type de données
+            extra: quelconque
+            
+        { public }
+        constructeur Option()
+        début
+            ceci.valeur <- ceci.defaut
+        fin
+        
+        fonction getLibellé()
+        début
+            // comportememnt par défaut
+            // Voir pour passer par un outil de traduction
+            retourne ceci.libellé
+        fin
+        
+        // Normalement Option et valeur de l'option sont deux choses distinctes
+        fonction getValeur() : quelconque
+        début
+            retourne ceci.valeur
+        fin
+        
+        procédure setValeur(v : quelconque)
+        début
+            ceci.valeur <- v
+        fin
+        
+        // Voir procédure de stockage et de récupération de l'information
+        procédure écrire(adaptateur : IStockageAdaptateur)
+        début
+            adaptateur.écrire ceci.nom
+            ...
+        fin
+        
+        procédure lire(adaptateur : IStockageAdaptateur)
+        début
+            adaptateur.lire ceci.nom
+            ...
+        fin
+        
+    fin
+    
+    {publique, abstraite}
+    classe Widget
+    début
+    
+    fin
+    
+    paquet Widgets
+    début
+        classe Controle étend Widget
+        début
+        
+        fin
+    fin
+    
+fin
+

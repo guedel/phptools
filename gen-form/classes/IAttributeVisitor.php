@@ -28,7 +28,7 @@
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    interface IAttributeVisitor
+    interface IOptionVisitor
     {
-        public function visitAttribute(Attribute $a);
+        public function visitOption(Option $a);
     }

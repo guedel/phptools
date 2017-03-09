@@ -36,12 +36,12 @@
      */
     class ControlRadio extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('values', 'Valeurs', 'text', null, true));
-            $this->addAttribute(new \Attribute('keys', 'Clefs présentes', 'bool', null, false, false));
-            $this->addAttribute(new \Attribute('default', 'Valeur par défaut', null, false));
+            parent::initOptionsList();
+            $this->addOption(new \Option('values', 'Valeurs', 'text', null, true));
+            $this->addOption(new \Option('keys', 'Clefs présentes', 'bool', null, false, false));
+            $this->addOption(new \Option('default', 'Valeur par défaut', null, false));
         }
 
         public function writeHtmlTag(\CodeWriter $render)

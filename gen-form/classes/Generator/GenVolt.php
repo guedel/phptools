@@ -42,6 +42,24 @@
 
         }
 
+        /**
+         * Code de base pour un controle dans volt
+         * @param \CodeWriter $writer
+         * @param string $tag
+         * @param string|array $parameters
+         */
+        private function genBaseControl(\CodeWriter $writer, $tag, $parameters = null)
+        {
+            if ($parameters) {
+                if (is_array($parameters)) {
+                    $parameters = implode(', ', $parameters);
+                }
+                $writer->write('{{ ' . $tag . '('. $parameters . ') }}' );
+            } else {
+                $writer->write('{{ ' . $tag . '}}' );
+            }
+        }
+
         public function genControlButton(\CodeWriter $writer, \ControlButton $c)
         {
 
@@ -89,7 +107,7 @@
 
         public function genControlTextbox(\CodeWriter $writer, \ControlTextbox $c)
         {
-            $gen->writer->write('{{' . '}}');
+            $this->genBaseControl($writer, 'textField');
         }
 
         public function prolog()

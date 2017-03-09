@@ -49,14 +49,10 @@
             $this->writer->writeln('<html>');
             $this->writer->writeln('<body>');
             $this->writer->indent();
-            $this->writer->writeln('<form>');
-            $this->writer->indent();
         }
 
         public function epilog()
         {
-            $this->writer->unindent();
-            $this->writer->writeln('</form>');
             $this->writer->unindent();
             $this->writer->writeln('</body>');
             $this->writer->writeln('</html>');

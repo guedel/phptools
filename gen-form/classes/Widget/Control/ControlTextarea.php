@@ -32,11 +32,11 @@
      */
     class ControlTextarea extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('columns', 'Largeur', 'int', null, false));
-            $this->addAttribute(new \Attribute('rows', 'Hauteur', 'int', null, false));
+            parent::initOptionsList();
+            $this->addOption(new \Option('columns', 'Largeur', 'int', null, false));
+            $this->addOption(new \Option('rows', 'Hauteur', 'int', null, false));
         }
 
         public function writeHtmlTag(\CodeWriter $render)
@@ -45,7 +45,7 @@
             $render->nl();
             $render->indent();
             $render->write(sprintf('<textarea id="%s" name="%s">', $this->id, $this->name));
-            $render->write($this->attributes['default']->value);
+            $render->write($this->Options['default']->value);
             $render->writeln('</textarea>');
             $render->unindent();
         }

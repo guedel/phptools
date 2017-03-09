@@ -7,10 +7,11 @@ enum DataType {
   dtInteger
   dtFloat
   dtString
+  dtEnum
   dtObject
 }
 
-class Attribute {
+class Option {
   + string name
   + string label
   + DataType type
@@ -19,43 +20,80 @@ class Attribute {
   + mixed default
   + mixed value
 
-  + <<construct>> Attribute(name, label, type, extra, required, default)
+  + <<create>> Option(string name, string label, bool required = false, DataType type =  dtString, mixed extra = null, mixed default = null)
 }
 note bottom: Determine un attribut d un controle
 
+OptionCollection *--> "0..*" Option
+class OptionCollection {
+  + <<create>> OptionCollection()
+  + integer getCount()
+	+ Option getOption(string name)
+  + Option addOption(name, label, type, required, default)
+  + Option addEnumOption(string name, string label, mixed enumeration, bool required, mixed default)
+  + addOption(Option option)
+}
 
+Widget ...>  OptionCollection : use
 abstract class Widget {
-	~attributes[]
-	+ <<construct>> Widget(attributes[])
-	+ setAttribute(string name, mixed value)
-	+ string getAttribute(string name)
-	+ initAttributeList()
+	~ OptionCollection options
+  + mixed id
+
+	+ <<create>> Widget()
+	~ {abstract} initOptionList()
 }
 
-interface IValuable {
-  + DataType getType()
-  + mixed eval(IWidgetVisitor visitor)
+WidgetCollection o--> "0..*" Widget
+class WidgetCollection {
+  + integer getCount()
+  + mixed addWidget(Widget widget, mixed index = null)
+  + removeWidget(mixed index)
+  + getWidget(mixed index)
 }
 
+
+Widget <|-- Container
+Container ...> WidgetCollection : use
+abstract class Container {
+  ~ WidgetCollection childs
+  + WidgetCollection getChilds()
+}
+
+Container <|-- Form
+abstract class Form {
+  + <<create>> Form()
+}
+
+Widget <|-- Control
+abstract class Control {
+  + string name
+
+  <<create>> Control()
+}
+
+ControlCollection o--> "0..*" Control 
+class ControlCollection {
+  + integer getCount()
+  + mixed addControl(Control control)
+  + getControl(mixed index)
+  + boolean removeControl(mixed index)
+}
+
+Control <|-- Textbox 
 class Textbox {
-	+ <<contruct>> Textbox(attributes[])
+	+ <<create>> Textbox()
 }
 
+Control <|-- Checkbox 
 class Checkbox {
-	+ <<contruct>> Checkbox(attributes[])
+	+ <<create>> Checkbox()
 }
 
+Control <|-- Listbox 
 class Listbox {
-	+ <<contruct>> Listbox(attributes[])
+	+ <<create>> Listbox()
 }
 
-Widget <|-- Textbox 
-IValuable <|-- Textbox 
- Widget <|-- Checkbox 
-IValuable <|-- Checkbox 
-Widget <|-- Listbox 
-IValuable <|-- Listbox
-}
 
 namespace generation {
   class CodeWriter {
@@ -64,7 +102,7 @@ namespace generation {
     - int indent
     + string spacer = '\\t'
     
-    + <<construct>> CodeWriter(string spacer="\\t", string initialIndent = 0)
+    + <<create>> CodeWriter(string spacer="\\t", string initialIndent = 0)
     + indent()
     + unindent()
     + write(string text)
@@ -86,15 +124,13 @@ namespace generation {
 
   class Generator {
      
-    + <<construct>> Generator()
+    + <<create>> Generator()
     + register_control_generator(WidgetClass, WidgetWriter)
   }
 
   abstract class WidgetWriter {
     - WidgetWriter next
-    
     + WidgetWriter setNext(WidgetWriter writer)
-
     + void render(Widget ctrl)
   }
 

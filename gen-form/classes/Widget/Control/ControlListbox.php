@@ -32,11 +32,11 @@
      */
     class ControlListbox extends ControlDropdown
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('height', 'hauteur', 'int', null, true));
-            $this->addAttribute(new \Attribute('multiselect', 'multiselect', 'bool', null, false));
+            parent::initOptionsList();
+            $this->addOption(new \Option('height', 'hauteur', 'int', null, true));
+            $this->addOption(new \Option('multiselect', 'multiselect', 'bool', null, false));
         }
 
         public function writeHtmlTag(\CodeWriter $render)

@@ -36,11 +36,11 @@
      */
     class WidgetForm extends \Widget
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('method', 'Méthode d\'envoi', Attribute::TYPE_ENUM, array('post', 'get')));
-            $this->addAttribute(new \Attribute('target', 'Cible du formulaire', Attribute::TYPE_ENUM, array('_blank', '_self', '_parent', '_top')));
-            $this->addAttribute(new \Attribute('action', 'Url de destination', Attribute::TYPE_STRING));
+            parent::initOptionsList();
+            $this->addOption(new \Option('method', 'Méthode d\'envoi', Option::TYPE_ENUM, array('post', 'get')));
+            $this->addOption(new \Option('target', 'Cible du formulaire', Option::TYPE_ENUM, array('_blank', '_self', '_parent', '_top')));
+            $this->addOption(new \Option('action', 'Url de destination', Option::TYPE_STRING));
         }
     }

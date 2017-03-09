@@ -29,7 +29,7 @@
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    abstract class BaseGenerator implements IAttributeVisitor, IWidgetVisitor, IFieldVisitor
+    abstract class BaseGenerator implements IOptionVisitor, IWidgetVisitor, IFieldVisitor
     {
         /**
          *
@@ -127,7 +127,7 @@
             //$this->generate($f);
         }
 
-        public function visitAttribute(\Attribute $a)
+        public function visitOption(\Option $a)
         {
             $this->generate($a);
         }

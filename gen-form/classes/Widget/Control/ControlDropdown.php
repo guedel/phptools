@@ -32,14 +32,14 @@
      */
     class ControlDropdown extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('source_type', 'type de source', 'enum', ['list','query'], true, 'list'));
-            $this->addAttribute(new \Attribute('source_value', 'source', 'text', null, true));
-            $this->addAttribute(new \Attribute('source_key', 'champ clef', 'text', null, false));
-            $this->addAttribute(new \Attribute('source_label', 'champ étiquette', 'text', null, false));
-            $this->addAttribute(new \Attribute('empty_option', 'élément vide', 'bool', null, false, true ));
+            parent::initOptionsList();
+            $this->addOption(new \Option('source_type', 'type de source', 'enum', ['list','query'], true, 'list'));
+            $this->addOption(new \Option('source_value', 'source', 'text', null, true));
+            $this->addOption(new \Option('source_key', 'champ clef', 'text', null, false));
+            $this->addOption(new \Option('source_label', 'champ étiquette', 'text', null, false));
+            $this->addOption(new \Option('empty_option', 'élément vide', 'bool', null, false, true ));
         }
 
         public function writeHtmlTag(\CodeWriter $render)

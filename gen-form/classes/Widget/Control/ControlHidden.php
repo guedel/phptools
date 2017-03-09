@@ -32,9 +32,9 @@
      */
     class ControlHidden extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
+            parent::initOptionsList();
         }
 
         public function writeHtmlTag(\CodeWriter $render)

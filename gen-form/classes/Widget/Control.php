@@ -44,11 +44,11 @@
          */
         public $name;
 
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('length', 'Longueur', 'int', null, false, 30));
-            $this->addAttribute(new \Attribute('unit', 'Unité', 'enum', ['px','em','%'], false, 'px'));
+            parent::initOptionsList();
+            $this->addOption(new \Option('length', 'Longueur', 'int', null, false, 30));
+            $this->addOption(new \Option('unit', 'Unité', 'enum', ['px','em','%'], false, 'px'));
         }
 
         /**

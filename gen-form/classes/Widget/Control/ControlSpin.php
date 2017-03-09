@@ -35,11 +35,11 @@
      */
     class ControlSpin extends \Widget\Control\ControlTextbox
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('min_value', 'valeur mini', 'int', null, false));
-            $this->addAttribute(new \Attribute('max_value', 'valeur maxi', 'int', null, false));
+            parent::initOptionsList();
+            $this->addOption(new \Option('min_value', 'valeur mini', 'int', null, false));
+            $this->addOption(new \Option('max_value', 'valeur maxi', 'int', null, false));
         }
 
         public function writeHtmlTag(\CodeWriter $render)

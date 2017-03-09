@@ -38,9 +38,9 @@
 
         /**
          *
-         * @var \Attribute
+         * @var \Option
          */
-        protected $attributes = [];
+        protected $options = [];
 
         /**
          * @var \Widget liste des éléments enfants
@@ -49,12 +49,12 @@
 
         public function __construct()
         {
-            $this->initAttributesList();
+            $this->initOptionsList();
         }
 
         public function __get($name)
         {
-            foreach($this->attributes as $attr) {
+            foreach($this->options as $attr) {
                 if ($attr->name == $name) {
                     return $attr->value;
                 }
@@ -63,25 +63,38 @@
 
         public function __set($name, $value)
         {
-            foreach($this->attributes as $attr) {
+            foreach($this->options as $attr) {
                 if ($attr->name == $name) {
                     $attr->value = $value;
                 }
             }
         }
 
-        protected function addAttribute(Attribute $attr)
+        /**
+         * Ajoute une option à la collection
+         * @param Option $attr
+         */
+        protected function addOption(Option $attr)
         {
-            $this->attributes[$attr->name] = $attr;
+            $this->options[$attr->name] = $attr;
         }
 
         /**
-         * Retourne la liste des attributs
-         * @return \Attribute
+         * Retourne la liste des options
+         * @return type
          */
-        protected function initAttributesList()
+        public function getOptions()
         {
-            //$this->addAttribute(new Attribute('id', 'Identifiant', 'string', null, false, 30));
+            return $this->options;
+        }
+
+        /**
+         * Initialise la liste des options
+         * @return \Option
+         */
+        protected function initOptionsList()
+        {
+            //$this->addOption(new Option('id', 'Identifiant', 'string', null, false, 30));
         }
 
         /**
@@ -89,10 +102,10 @@
          * @param mixed $index
          * @return string
          */
-        public function getAttributesForm($index)
+        public function getOptionsForm($index)
         {
             $ret = '<table style="border: solid black thin">';
-            foreach ($this->attributes as $attr) {
+            foreach ($this->options as $attr) {
                 $ret .= '<tr><th>' . $attr->label . '</th>';
 
                 $ret .= '<td>' . ($attr->required ? '*' : '') . '</td>';
@@ -105,9 +118,9 @@
          * Procédure de stockage des attributs du controle
          * @param type $index
          */
-        public function storeAttributes($index)
+        public function storeOptions($index)
         {
-            foreach ($this->attributes as $attr) {
+            foreach ($this->options as $attr) {
                 $attr->storeHtmlValue('ctl', $index);
             }
         }
@@ -116,9 +129,9 @@
          * Procédure de récupération des attributs du controle
          * @param type $index
          */
-        public function retrieveAttributes($index)
+        public function retrieveOptions($index)
         {
-            foreach ($this->attributes as $attr) {
+            foreach ($this->options as $attr) {
                 $attr->retrieveHtmlValue('ctl', $index);
             }
         }
@@ -143,7 +156,7 @@
             }
         }
 
-        public function writeChildsTag(CodeWriter $render)
+        private function writeChildsTag(CodeWriter $render)
         {
             foreach ($this->childs as $child) {
                 $child->writeHtmlTag($render);

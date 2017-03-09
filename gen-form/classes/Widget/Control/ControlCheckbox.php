@@ -32,11 +32,11 @@
      */
     class ControlCheckbox extends \Widget\Control
     {
-        protected function initAttributesList()
+        protected function initOptionsList()
         {
-            parent::initAttributesList();
-            $this->addAttribute(new \Attribute('checked', 'Coché', 'bool', false, false));
-            $this->addAttribute(new \Attribute('value', 'Valeur', 'text', null, false));
+            parent::initOptionsList();
+            $this->addOption(new \Option('checked', 'Coché', 'bool', false, false));
+            $this->addOption(new \Option('value', 'Valeur', 'text', null, false));
         }
 
         public function writeHtmlTag(\CodeWriter $render)
