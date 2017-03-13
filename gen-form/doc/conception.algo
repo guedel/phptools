@@ -3,14 +3,13 @@
  - formulaire simple
  - édition en tableau
  
- - destination: client HTML, traitement PHP, Twig, ...
+ - destination: client HTML, traitement PHP, Twig, base de données...
 */
-
 paquet librairie
 début
-	interface IAttributVisiteur
+	interface IOptionVisiteur
 	début
-		procédure visiteAttribut(a: Attribut)
+		procédure visiteOption(a: Option)
 	fin
 
 	interface IWidgetVisiteur
@@ -73,10 +72,10 @@ début
 		fin
 	fin
 
-	classe Attribut
+	classe Option
 	début
 		// Types de données supportées par l'attribut
-		enumeration TypeAttribut
+		enumeration TypeOption
 		début
 			'enum'
 			'int'
@@ -92,7 +91,7 @@ début
 		/// Le libellé à afficher
 		var label: chaine
 		/// Le type de donnée stocké par l'attribut
-		var typeA: TypeAttribut 
+		var typeA: TypeOption 
 		/// Visible ou non 
 		var visible: booleen
 		/// Données complémentaires
@@ -104,7 +103,7 @@ début
 		/// La valeur stockée
 		var valeur: quelconque
 		
-		constructeur Attribut(nom, label: chaine, typeA: TypeAttribut, visible: booléen = vrai, extra: chaine = null, requis: booleen = faux, defaut : quelconque = null)
+		constructeur Option(nom, label: chaine, typeA: TypeOption, visible: booléen = vrai, extra: chaine = null, requis: booleen = faux, defaut : quelconque = null)
 		début
 			ceci.nom = nom
 			ceci.label = label
@@ -128,9 +127,9 @@ début
 			écrire '<input type="hidden" name="' + mon.getHtmlName(owner, index) + '" value="' + ceci.valeur + '" />'
 		fin
 		
-		procédure accepte(v :IAttributVisiteur)
+		procédure accepte(v :IOptionVisiteur)
 		début
-			v.VisiteAttribut ceci
+			v.VisiteOption ceci
 		fin
 	fin
 
@@ -138,25 +137,25 @@ début
 	classe Widget 
 	début
 		{privé}
-		var listeAttributs: Collection<chaine, Attribut>
+		var listeOptions: Collection<chaine, Option>
 		
 		{publique}
 		constructeur Widget()
 		début
-		  ceci.initListeAttributs()
+		  ceci.initListeOptions()
 		fin
 
 		// Procédure de création des attributs nécessaires au contrôle
 		{protégée}
-		procedure initListeAttributs()
+		procedure initListeOptions()
 		début
-			ceci.ajouteAttribut instancie Attribut('id', 'Identifiant', 'string', vrai)
+			ceci.ajouteOption instancie Option('id', 'Identifiant', 'string', vrai)
 		fin 
 		
 		{protégée}
-		procédure ajouteAttibut(a : Attribut)
+		procédure ajouteAttibut(a : Option)
 		début
-			ceci.listeAttributs.insère a.nom, a
+			ceci.listeOptions.insère a.nom, a
 		fin
 		
 		{publique}
@@ -178,9 +177,9 @@ début
 		fin
 
 		{protégée}
-		procedure initListeAttributs()
+		procedure initListeOptions()
 		début
-			ceci.ajouteAttribut instancie Attribut('nom', 'Nom', 'string', vrai)
+			ceci.ajouteOption instancie Option('nom', 'Nom', 'string', vrai)
 		fin 
 
 		{publique}
@@ -193,11 +192,30 @@ début
 	/// Exemple de controle
 	classe ControlTextbox étend Controle
 	début
-	   procedure initAttributeList()
+	   procedure initListeOptions()
 	   début
 	   fin
 	fin
-fin // paquet
+    
+    // paquet qui contient les opération de génération
+    paquet génération
+    début
+        // classe de base
+        {abstraite}
+        classe BaseGénération
+        début
+            {publique}
+            procédure prépare();
+            procédure finalise();
+            procédure génèreWidget(widget: Widget);
+            /*
+            procédure génèreFormulaire(formulaire: Formulaire);
+            procédure génèreControle(controle: Controle);
+            procédure génèreOption(option: Option);
+            */
+        fin
+    fin // paquet génération
+fin // paquet librairie
 	
 algorithme gestionnaire
 début

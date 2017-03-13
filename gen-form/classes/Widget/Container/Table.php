@@ -24,63 +24,47 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
+    namespace Widget\Container;
 
     /**
-     * Description of Container
+     * Description of Table
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    abstract class Container extends \Widget
+    class Table extends \Widget\Container
     {
-        /**
-         * @var \Widget liste des éléments enfants
-         */
-        protected $childs = [];
-
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        protected function writeChildsTag(\CodeWriter $render)
+        public function appendRow(TableRow $row)
         {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
-            }
+
         }
 
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
+        public function createRow()
+        {
+
+        }
+
+        public function createCol()
+        {
+
+        }
+
         public function writeHtmlTag(\CodeWriter $render)
         {
-            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
             if (count($this->childs) > 0) {
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->write(self::closeTag($this->getTag(), true));
+
             } else {
-                $render->write(self::closeTag($this->getTag(), false));
+
             }
         }
 
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(\Widget $child)
+        protected function getAttributes()
         {
-            $this->childs[] = $child;
+
         }
 
-        /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
-         */
-        public function getChilds()
+        protected function getTag()
         {
-            return $this->childs;
+            return 'table';
         }
 
     }

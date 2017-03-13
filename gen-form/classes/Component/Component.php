@@ -24,63 +24,81 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
+    namespace Component;
 
     /**
-     * Description of Container
+     * Description of Component
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
+     *
+     * @property string $id
      */
-    abstract class Container extends \Widget
+    abstract class Component implements IPropertyCustomer
     {
-        /**
-         * @var \Widget liste des éléments enfants
-         */
-        protected $childs = [];
+        protected $options = array();
 
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        protected function writeChildsTag(\CodeWriter $render)
+        public function __construct()
         {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
+            $this->initProperties();
+        }
+
+        public function __get($name)
+        {
+            foreach($this->options as $attr) {
+                if ($attr->name == $name) {
+                    return $attr->value;
+                }
             }
         }
 
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        public function writeHtmlTag(\CodeWriter $render)
+        public function __set($name, $value)
         {
-            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
-            if (count($this->childs) > 0) {
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->write(self::closeTag($this->getTag(), true));
-            } else {
-                $render->write(self::closeTag($this->getTag(), false));
+            foreach($this->options as $attr) {
+                if ($attr->name == $name) {
+                    $attr->value = $value;
+                }
             }
         }
 
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(\Widget $child)
+        public function initProperties()
         {
-            $this->childs[] = $child;
+            $this->addOption(Option::createOption('id', Option::TYPE_STRING));
         }
 
         /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
+         *
+         * @param \Component\PropertyBag $bag
          */
-        public function getChilds()
+        public function readProperties(PropertyBag $bag)
         {
-            return $this->childs;
+            $this->options['id']->value = $bag->read('id', null);
+        }
+
+        /**
+         *
+         * @param \Component\PropertyBag $bag
+         */
+        public function writeProperties(PropertyBag $bag)
+        {
+            $bag->write(('id'), $this->id, null);
+        }
+
+        /**
+         *
+         * @param \Component\Option $option
+         */
+        protected function addOption(Option $option)
+        {
+            $this->options[$option->name] = $option;
+        }
+
+        /**
+         *
+         * @return array|Option
+         */
+        public function getOptions()
+        {
+            return $this->options;
         }
 
     }

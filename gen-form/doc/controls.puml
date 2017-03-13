@@ -22,7 +22,7 @@ class Option {
 
   + <<create>> Option(string name, string label, bool required = false, DataType type =  dtString, mixed extra = null, mixed default = null)
 }
-note bottom: Determine un attribut d un controle
+note bottom: Determine un parametre d un controle
 
 OptionCollection *--> "0..*" Option
 class OptionCollection {
@@ -51,6 +51,29 @@ class WidgetCollection {
   + getWidget(mixed index)
 }
 
+interface IRenderer {
+  + string render()
+}
+
+interface IReader {
+  + read()
+}
+
+Widget <|--- WidgetRenderer
+IRenderer <|-- WidgetRenderer
+abstract class WidgetRenderer {
+  - Widget wrapped
+  + <<create>> WidgetRenderer(Widget decorated)
+  + {abstract} string render()
+}
+
+Widget <|--- WidgetReader
+IReader <|-- WidgetReader
+abstract class WidgetReader {
+  - Widget wrapped
+  + <<create>> WidgetReader(Widget wrapped)
+  + read()
+}
 
 Widget <|-- Container
 Container ...> WidgetCollection : use
@@ -94,7 +117,6 @@ class Listbox {
 	+ <<create>> Listbox()
 }
 
-
 namespace generation {
   class CodeWriter {
     - string current
@@ -123,7 +145,6 @@ namespace generation {
   }
 
   class Generator {
-     
     + <<create>> Generator()
     + register_control_generator(WidgetClass, WidgetWriter)
   }
@@ -133,7 +154,6 @@ namespace generation {
     + WidgetWriter setNext(WidgetWriter writer)
     + void render(Widget ctrl)
   }
-
 }
 
 @enduml

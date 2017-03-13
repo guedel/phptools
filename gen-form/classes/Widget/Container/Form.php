@@ -24,63 +24,29 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
-
+    namespace Widget\Container;
     /**
-     * Description of Container
+     * Représente un formulaire
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
+     *
+     * @property string $method Méthode d'envoi du formulaire
+     * @property string $target Cible du formulaire
+     * @property string $action Url de destination
      */
-    abstract class Container extends \Widget
+    class Form extends \Widget\Container
     {
-        /**
-         * @var \Widget liste des éléments enfants
-         */
-        protected $childs = [];
-
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        protected function writeChildsTag(\CodeWriter $render)
+        protected function initOptionsList()
         {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
-            }
+            parent::initOptionsList();
+            $this->addOption(new \Option('method', 'Méthode d\'envoi', Option::TYPE_ENUM, array('post', 'get')));
+            $this->addOption(new \Option('target', 'Cible du formulaire', Option::TYPE_ENUM, array('_blank', '_self', '_parent', '_top')));
+            $this->addOption(new \Option('action', 'Url de destination', Option::TYPE_STRING));
         }
 
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        public function writeHtmlTag(\CodeWriter $render)
+        protected function getTag()
         {
-            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
-            if (count($this->childs) > 0) {
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->write(self::closeTag($this->getTag(), true));
-            } else {
-                $render->write(self::closeTag($this->getTag(), false));
-            }
-        }
-
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(\Widget $child)
-        {
-            $this->childs[] = $child;
-        }
-
-        /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
-         */
-        public function getChilds()
-        {
-            return $this->childs;
+            return 'form';
         }
 
     }

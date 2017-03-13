@@ -93,7 +93,7 @@
          *
          * @param object $o
          */
-        protected function generate(Widget $o)
+        private function generate(Widget $o)
         {
             $found = false;
             foreach ($this->register as $name => $fn) {
@@ -103,7 +103,7 @@
                 }
             }
             if (! $found ) {
-                if (isset($this->register['ControlTextbox'])) {
+                if (isset($this->register[Widget\Control\ControlTextbox::class])) {
                     // fallback -> textbox
                     $this->comment('no generator found for \'' . get_class($o) . '\', so use of Textbox control');
                     $fn = $this->register['ControlTextBox'];
@@ -114,7 +114,6 @@
                     $this->comment('no generator found for ' . get_class($o));
                 }
             }
-
         }
 
         public function visitWidget(\Widget $w)
@@ -129,11 +128,11 @@
 
         public function visitOption(\Option $a)
         {
-            $this->generate($a);
+            //$this->generate($a);
         }
 
         /**
-         * Inscription des contrôles de base
+         * Inscription des générateurs de contrôles
          */
         protected function registerGenerators()
         {

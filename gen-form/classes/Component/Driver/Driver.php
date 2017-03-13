@@ -24,63 +24,28 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
+    namespace Component\Driver;
 
     /**
-     * Description of Container
+     * Description of Driver
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    abstract class Container extends \Widget
+    abstract class Driver
     {
         /**
-         * @var \Widget liste des éléments enfants
+         * Retourne la liste des schémas
+         * @returns array
          */
-        protected $childs = [];
+        public function getSchemas();
 
         /**
-         *
-         * @param \Widget\CodeWriter $render
+         * Retourne la liste des tables d'un schéma
          */
-        protected function writeChildsTag(\CodeWriter $render)
-        {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
-            }
-        }
+        public function getTables($schemaname);
 
         /**
-         *
-         * @param \Widget\CodeWriter $render
+         * Interrogation de la base
          */
-        public function writeHtmlTag(\CodeWriter $render)
-        {
-            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
-            if (count($this->childs) > 0) {
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->write(self::closeTag($this->getTag(), true));
-            } else {
-                $render->write(self::closeTag($this->getTag(), false));
-            }
-        }
-
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(\Widget $child)
-        {
-            $this->childs[] = $child;
-        }
-
-        /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
-         */
-        public function getChilds()
-        {
-            return $this->childs;
-        }
-
+        public function query($sql);
     }

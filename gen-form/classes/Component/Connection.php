@@ -24,46 +24,27 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
+    namespace Component;
+
     /**
-     * Représente un formulaire
+     * Description of Coonection
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      *
-     * @property string $method Méthode d'envoi du formulaire
-     * @property string $target Cible du formulaire
-     * @property string $action Url de destination
+     * @property string $driver Nom du pilote de connexion
+     * @property string $connexion_string Chaine de connexion à la base
+     * @property string $username Nom d'utilisateur
+     * @property string $password Mot de passe
      */
-    class WidgetForm extends \Widget
+    class Connection extends Component
     {
-        protected function initOptionsList()
+        public function initProperties()
         {
-            parent::initOptionsList();
-            $this->addOption(new \Option('method', 'Méthode d\'envoi', Option::TYPE_ENUM, array('post', 'get')));
-            $this->addOption(new \Option('target', 'Cible du formulaire', Option::TYPE_ENUM, array('_blank', '_self', '_parent', '_top')));
-            $this->addOption(new \Option('action', 'Url de destination', Option::TYPE_STRING));
-        }
-
-        public function writeHtmlTag(\CodeWriter $render)
-        {
-            $attrs = array();
-            foreach($this->options as $opt) {
-                $attrs[$opt->name] = $opt->value;
-            }
-            $tag = \Widget::openTag('form', $attrs);
-            $render->write($tag);
-            if (count($this->childs) > 0) {
-                $render->writeln('>');
-                $render->indent();
-                foreach ($this->childs as $child) {
-                    $child->writeHtmlTag($render);
-                }
-                $render->unindent();
-                $render->writeln('</form>');
-            }
-            else {
-                $render->writeln('/>');
-            }
-
+            parent::initProperties();
+            $this->addOption(Option::createEnumOption('driver', array('mysql','sqlite'), true, 'Pilote de connexion', 'mysql' ));
+            $this->addOption(Option::createOption('connection_string'));
+            $this->addOption(Option::createOption('schema', 'string', true, 'Schéma de la base utilisée'));
+            $this->addOption(Option::createOption('username', Option::TYPE_STRING, false, 'Nom d\'utilisateur' ));
+            $this->addOption(Option::createOption('password', Option::TYPE_STRING, false, 'Mot de passe' ));
         }
     }

@@ -1,0 +1,96 @@
+@startuml
+legend
+		Composants
+endlegend
+
+abstract class PropertyBag {
+  + mixed read(string name, mixed default)
+  + write(string name, mixed value, mixed default)
+}
+
+PropertyCustomer ...> PropertyBag : use
+interface PropertyCustomer {
+  + initProperties()
+  + writeProperties(PropertyBag bag)
+  + readProperties(PropertyBag bag)
+}
+
+PropertyCustomer <|-- Component : implements
+abstract class Component {
+  string id
+}
+
+abstract class ComponentVisitor {
+  visitConnection(Connection)
+  visitSchema(Schema)
+  visitQuery(Query)
+  visitColumn(Column)
+  visitForm(Form)
+  visitControl(Control)
+  visitOption(Option)
+}
+
+class Schema {
+  + string name
+}
+
+Component <|-- Connection
+class Connection {
+  string driver
+  string hostname
+  int *port
+  string username
+  string password
+  string schema
+}
+
+Schema "0..*" --> "1" Connection
+class Schema {
+  string name
+}
+
+Query "0..*" --> "1" Schema
+Component <|-- Query
+class Query {
+  string schema
+  string tablename
+  string sql
+}
+
+Query "1" <-- "1..*" Form
+Form *--> "0..*" Control
+Component <|-- Form
+class Form {
+   Control controls[]
+}
+
+enum OptionType {
+  text
+  integer
+  number
+  enum
+  query
+}
+
+Component <|-- Column
+Query *--> "1..*" Column
+class Column {
+  string name
+  string data_type
+}
+
+Component --> "0..*" Option
+Component <|-- Control
+Control o--> "0..1 source" Column
+class Control {
+  Column source
+}
+
+Option ...> OptionType : use
+class Option {
+  string name
+  OptionType type
+  mixed value
+}
+
+@enduml

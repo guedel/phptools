@@ -24,63 +24,44 @@
      * THE SOFTWARE.
      */
 
-    namespace Widget;
+    namespace Generator;
 
     /**
-     * Description of Container
+     * Génère le code HTML qui permet de saisir les options
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    abstract class Container extends \Widget
+    class GenHTMLGetOptions extends \BaseGenerator
     {
-        /**
-         * @var \Widget liste des éléments enfants
-         */
-        protected $childs = [];
-
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        protected function writeChildsTag(\CodeWriter $render)
+        protected function registerGenerators()
         {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
-            }
+            parent::registerGenerators();
+            $this->registerGenerator(\Widget\Control\ControlButton::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlCheckbox::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlDate::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlDropdown::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlHidden::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlListbox::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlRadio::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlSpin::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlTextarea::class, [$this, 'genWidget']);
+            $this->registerGenerator(\Widget\Control\ControlTextbox::class, [$this, 'genWidget']);
         }
 
-        /**
-         *
-         * @param \Widget\CodeWriter $render
-         */
-        public function writeHtmlTag(\CodeWriter $render)
+        protected function comment($text)
         {
-            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
-            if (count($this->childs) > 0) {
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->write(self::closeTag($this->getTag(), true));
-            } else {
-                $render->write(self::closeTag($this->getTag(), false));
-            }
+            $this->writer->writeln('<!--' . $text . '-->' );
         }
 
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(\Widget $child)
+        public function epilog()
         {
-            $this->childs[] = $child;
+
         }
 
-        /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
-         */
-        public function getChilds()
+        public function prolog()
         {
-            return $this->childs;
+
         }
 
+//put your code here
     }

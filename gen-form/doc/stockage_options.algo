@@ -1,9 +1,5 @@
-algorithme stratégie_stockage_options_par_pont
+paquet composants
 début
-    /*
-     * Principe de l'algorithme:
-     * 
-    */
     énumération TypeDonnéee
     début
         "quelconque"
@@ -15,6 +11,15 @@ début
         "requete"
         "objet"
     fin
+
+fin;
+
+algorithme stratégie_stockage_options_par_pont
+début
+    /*
+     * Principe de l'algorithme:
+     * 
+    */
 
     {abstraite}
     classe StockageOption
@@ -106,4 +111,44 @@ début
         procédure récupérer();
         
     fin
+fin
+
+algorithme stockage_widget
+début
+    importe composants.*;
+    
+    {abstraite}
+    classe Widget
+    début
+        var id : chaine
+    fin
+    
+    classe WidgetRenderer
+    début
+        constructeur WidgetRenderer(widget : Widget);
+        procédure render() // Lance une exception en cas d'échec
+    fin
+
+    classe WidgetRendererRegister
+    début
+        var renderers : Collection<WidgetClass, RendererClass>
+    fin
+    
+    // exemple de rendu d'un textbox pour le HTML
+    classe HtmlTextboxRenderer étend WidgetRenderer
+    début
+        {privée}
+        var content : Controles.Textbox
+        constructeur HtmlTextboxRenderer(ctl : Controles.Textbox)
+        début
+            ceci.content <- ctl;
+        fin
+        
+        {publique}
+        procédure render()
+        début
+            écrire formate("<input id='%1' name='%2' type='text' value='%3' />", ceci.content.id, ceci.content.nom, ceci.content.valeur);
+        fin
+    fin
+    
 fin

@@ -29,7 +29,7 @@
      *
      * @author Guillaume de Lestanville <guillaume.delestanville@proximit.fr>
      */
-    class Widget
+    abstract class Widget
     {
         /**
          * @var mixed identifiant
@@ -42,10 +42,6 @@
          */
         protected $options = [];
 
-        /**
-         * @var \Widget liste des éléments enfants
-         */
-        protected $childs = [];
 
         public function __construct()
         {
@@ -145,46 +141,39 @@
          */
         public function writeHtmlTag(CodeWriter $render)
         {
-            if (count($this->childs) > 0) {
-                $render->writeln('<div id="' . $this->id .'">');
-                $render->indent();
-                $this->writeChildsTag($render);
-                $render->unindent();
-                $render->writeln('</div>');
-            } else {
-                $render->write('<span id="' . $this->id . '"/>');
-            }
+            $render->write(self::openTag($this->getTag(), $this->getAttributes()));
+            $render->write('/>');
         }
 
-        private function writeChildsTag(CodeWriter $render)
-        {
-            foreach ($this->childs as $child) {
-                $child->writeHtmlTag($render);
-            }
-        }
 
         public function accept(IWidgetVisitor $visitor)
         {
             $visitor->visitWidget($this);
         }
 
-        /**
-         * @param Widget $child
-         */
-        public function appendChild(Widget $child)
-        {
-            $this->childs[] = $child;
-        }
+
+        abstract protected function getTag();
 
         /**
-         * Retourne la liste des éléments enfants s'ils existent
-         * @return array|Widget
+         * Retourne par défaut un tableau qui correspond aux options
+         * @return array
          */
-        public function getChilds()
+        protected function getAttributes()
         {
-            return $this->childs;
+            $attrs = array();
+            foreach($this->options as $opt) {
+                $attrs[$opt->name] = $opt->value;
+            }
+            return $attrs;
         }
 
+
+        /**
+         *
+         * @param string $tag le nom de balise HTML
+         * @param array $attributes tableau d'attributs HTML
+         * @return string
+         */
         protected static function openTag($tag, array $attributes = null)
         {
             $ret = '<' . $tag;
@@ -194,5 +183,18 @@
                 }
             }
             return $ret;
+        }
+
+        /**
+         *
+         * @param string $tag
+         * @param boolean $withchilds
+         * @return string
+         */
+        protected static function closeTag($tag, $withchilds) {
+            if ($withchilds) {
+                return "</$tag>";
+            }
+            return "/>";
         }
     }
