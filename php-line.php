@@ -1,7 +1,7 @@
 <?php 
 	$instr = '';
 	if (isset($_REQUEST['instr'])) {
-		$instr = $_REQUEST['instr'];
+		$instr = urldecode($_REQUEST['instr']);
 	}
 	
 	if (isset($_REQUEST['qry'])) {
@@ -18,7 +18,7 @@
 <html>
 <head>
 <title>Console PHP</title>
-<script>
+<script type="text/javascript">
 	// Basé sur l'extrait de code trouvé à 
 	// http://www.javascriptsource.com/ajax/simple-ajax-by-jeff-manning-120613062001.html
 	function ajax(url) {
@@ -35,11 +35,15 @@
 		this.page = url;
 		 
 		this.addParam = function(name,value) {
+			if (value instanceof String || typeof value === 'string') {
+				var plus = encodeURIComponent('+');
+				value = value.replace('+', plus);
+			}
 			if (this.variables.length == 0) {
-				this.variables = escape(name) + "=" + escape(value)
+				this.variables = encodeURIComponent(name) + "=" + encodeURIComponent(value)
 			}
 			else {
-				this.variables += "&" + escape(name) + "=" + escape(value)
+				this.variables += "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value)
 			}
 		}
 		 
@@ -90,10 +94,11 @@
 	<div id="result">
 	</div>
 </fieldset>
-<script>
+<script type="text/javascript">
 	function btnclick() {
 		var http = new ajax('php-line.php');
-		http.addParam('instr', document.getElementById("instr").value );
+		var instr = document.getElementById("instr").value;
+		http.addParam('instr', instr );
 		http.addParam('qry', true);
 		http.sendRequest( 'POST', function(response) {
 			var item = document.getElementById('result');
