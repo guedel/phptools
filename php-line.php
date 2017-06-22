@@ -18,6 +18,7 @@
 <html>
 <head>
 <title>Console PHP</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script type="text/javascript">
 	// Basé sur l'extrait de code trouvé à 
 	// http://www.javascriptsource.com/ajax/simple-ajax-by-jeff-manning-120613062001.html
@@ -86,7 +87,7 @@
 </head>
 <body>
 <form id="frmInput" method='get'>
-	<input type='button' onclick='btnclick()' value='Executer'/>
+	<input type='button' onclick='btnclick()' value='Exécuter'/>
 	<p><textarea id="instr" name='instr' rows='10' cols='80'><?php echo $instr; ?></textarea></p>
 </form>
 <fieldset style='border: 1px solid red'>
