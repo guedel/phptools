@@ -1,37 +1,106 @@
 paquet composants
 début
+    interface IAccepteVisiteur
+    début
+        procédure accepte(visiteur: Visiteur);
+    fin
+
     {abstraite}
     classe Composant
     début
-    fin
-
-    classe Fenetre
-    début
+        var id: quelconque
     fin
     
-    classe Vue
+    classe Projet
     début
+        var source : quelconque // nom de fichier, jeu de table dans une base, etc. A définir
+        
+        var formulaires: collection de Form
+        var connexions: collection de Connection
     fin
 
-    classe Conteneur
-    début
-    fin
-
+    /*
+     * Classe de pilote de base de données
+    */
     {abstraite}
-    interface IStockageAdaptateur
+    classe Pilote 
     début
-        procédure écrire(clé : chaine, valeur : quelconque, défaut : quelconque = null);
-        fonction lire(clé : chaine, défaut : quelconque = null) : quelconque;
+        fonction OuvreConnexion(...) : Connection
+        // Récupère la liste des schémas
+        fonction getSchemas() : tableau de chaine
+        // Récupère la liste des tables d'un schéma
+        fonction getTables(schema : chaine) : tableau de chaine
+        // Récupère la liste des noms de colonne d'une table
+        fonction getColumns(schema: chaine, tablename: chaine): tableau de chaine
     fin
     
-    énumération TypeDonnéee
+    classe Connection étend Composant
+    début
+        var driver, nomhote : chaine
+        var  port: entier
+        var utilisateur, motpasse, schema : chaine
+        
+        // dépend du pilote de base de données
+        fonction getSchemas() : tableau de Schema;
+    fin
+    
+    classe Schema
+    début
+        var nom : chaine
+        var connection : Connection
+        
+        {publique}
+        constructeur Schema(nom: chaine, cn : Connection)
+        début
+            ceci.nom <- nom
+            ceci.connection <- cn
+        fin
+
+        // dépend du pilote
+        // retourne la liste des tables disponibles dans le schéma
+        {publique}
+        fonction getTables() : tableau de chaine;
+    fin
+    
+    classe Query étend Composant
+    début
+        // ou l'un ou l'autre
+        var nomtable, sql : chaine
+        // schéma de référence pour la requête
+        var schemaDepart: Schema
+    fin
+    
+    classe Column étend Composant
+    début
+        var query : Query
+       
+        constructeur Column(query : Query)
+        début
+            ceci.query <- query
+        fin
+    fin
+    
+    classe Form étend Composant
+    début
+        var requete: Query
+        var controles : collection de Control
+    fin
+
+    {abstraite }
+    classe Control étend Composant
+    début
+        // champ auquel le controle fait référence
+        var champ : Colonne
+    fin
+    
+    énumération TypeOption
     début
         "texte"
         "entier"
         "décimal"
         "booléen"
-        "requete"
-        "enum"
+        "requête"
+        "énumération"
         "objet"
     fin
 
@@ -41,7 +110,7 @@ début
         variable
             nom : chaine
             libellé: chaine
-            typeDonnee : TypeDonnée
+            typeOption : TypeOption
             requis: booléen
             défaut: quelconque
             valeur: quelconque
@@ -49,12 +118,12 @@ début
             extra: quelconque
             
         { public }
-        constructeur Option(nom : chaine, libellé = chaine, requis : booléen = faux, typeDonnée : TypeDonnée = "texte", , défaut = null, extra = null)
+        constructeur Option(nom : chaine, libellé = chaine, requis : booléen = faux, typeOption : TypeOption = "texte", , défaut = null, extra = null)
         début
             ceci.nom <- nom
             ceci.libellé <- libellé
             ceci.requis <- requis
-            ceci.typeDonnée <- typeDonnée
+            ceci.typeOption <- typeOption
             ceci.défaut <- défaut
             ceci.extra <- extra
             ceci.valeur <- ceci.defaut
@@ -62,7 +131,7 @@ début
         
         fonction getLibellé()
         début
-            // comportememnt par défaut
+            // comportement par défaut
             // Voir pour passer par un outil de traduction
             retourne ceci.libellé
         fin
@@ -78,73 +147,117 @@ début
             ceci.valeur <- v
         fin
         
-        // Voir procédure de stockage et de récupération de l'information
-        procédure écrire(adaptateur : IStockageAdaptateur)
-        début
-            adaptateur.écrire  "nom", ceci.nom
-            ...
-        fin
-        
-        procédure lire(adaptateur : IStockageAdaptateur)
-        début
-            ceci.nom <- adaptateur.lire("nom")
-            ...
-        fin
-        
     fin
     
     classe FabriqueOption
     début
-        fonction créeOptionTexte(...) : Option;
-        fonction créeOptionEntier() : Option;
-        fonction créeOptionDécimale() : Option;
-        fonction créeOptionBooléenne() : Option;
-        fonction créeOptionEnumérée() : Option;
-        fonction créeOptionRequêtée() : Option;
+        fonction créeOption(...) : Option;
+        fonction créeOptionEnumérée(...) : Option;
     fin
     
-    classe WidgetCollection
+    /*
+      Permet de définir une méthode de persistence pour un composant
+    */
+    {abstraite}
+    classe Persistence 
     début
-        {privée}
-        var widgets : Association<chaine, Widget>
+        var parent : Persistence
         
-        fonction compte() : entier
+        constructeur Persistence(parent : Persistence = null)
         début
-            retourne ceci.widgets.compte()
+            ceci.parent <- parent
         fin
         
-        procédure ajoute(widget: Widget)
+        // Entame l'opération de persistence
+        procédure commence()
         début
-            ceci.widgets.insère(widget.nom, widget);
+            si parent <> null alors
+                parent.commence()
         fin
         
-        procédure retire(widget: Widget)
+        // Procédure d'écriture d'une information
+        {abstraite}
+        procédure injecte(nom : chaine, valeur : quelconque, typeValeur: chaine = "texte");
+        
+        // Procédure de lecture d'une information
+        {abstraite}
+        fonction extrait(nom : chaine, typeValeur : chaine = "texte") : quelconque;
+        
+        // termine l'opération de persistence
+        procédure termine();
         début
-            ceci.widgets.supprime(widget.nom);
+            si non parent est null alors
+                parent.termine()
+        fin
+        
+        procédure annule();
+        début
+            si non parent est null alors
+                parent.annule()
         fin
     fin
     
-    {publique, abstraite}
-    classe Widget
+    /* 
+     * Visite l'arborescence des composants du paquet
+    */
+    {abstraite}
+    classe Visiteur
     début
-        // Le widget est déjà un conteneur
-        {publique}
-        var id: quelconque;
-        var fils: WidgetCollection
-        
-        {publique}
-        constructeur Widget()
-        début
-        fin;
+        procédure visiteComposant(c : Composant);
+        procédure visiteConnection(c : Connection);
+        procédure visiteSchema(s : Schema);
+        procédure visiteQuery(q : Query);
+        procédure visiteForm(f : Form);
+        procédure visiteControle(c : Control);
+        procédure visiteOption(o : Option);
     fin
     
-    paquet Widgets
+    
+    paquet Control 
     début
-        classe Controle étend Widget
+        classe Textbox étend Control
         début
+        fin
         
+        // Pareil pour les autres controles
+        ...
+    fin
+    
+    paquet Génération
+    début
+        classe GénérationHTML étend ComposantsVisiteur
+        début
+            procédure visiteComposant(c : Composant)
+            début
+            fin
+            
+            procédure visiteConnection(c : Connection)
+            début
+                var f : Form
+                pour chaque f dans c.formulaires
+                    f.accept ceci
+            fin
+            
+            procédure visiteSchema(s : Schema)
+            début
+            fin
+            
+            procédure visiteQuery(q : Query)
+            début
+            fin
+            
+            procédure visiteForm(f : Form)
+            début
+            fin
+            
+            procédure visiteControle(c : Control)
+            début
+            fin
+            
+            procédure visiteOption(o : Option)
+            début
+            fin
         fin
     fin
-    
 fin
 

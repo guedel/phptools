@@ -30,10 +30,6 @@ abstract class ComponentVisitor {
   visitOption(Option)
 }
 
-class Schema {
-  + string name
-}
-
 Component <|-- Connection
 class Connection {
   string driver

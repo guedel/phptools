@@ -61,4 +61,9 @@
             $render->writeln('<input type="text" value="" name="'. $this->name . '" id="'. $this->id . '" />');
         }
 
+        protected function getTag()
+        {
+            return 'input';
+        }
+
     }
