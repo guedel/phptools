@@ -38,7 +38,7 @@
 		this.addParam = function(name,value) {
 			if (value instanceof String || typeof value === 'string') {
 				var plus = encodeURIComponent('+');
-				value = value.replace('+', plus);
+				value = value.replace(/\+/g, plus);
 			}
 			if (this.variables.length == 0) {
 				this.variables = encodeURIComponent(name) + "=" + encodeURIComponent(value)
