@@ -24,21 +24,6 @@
      * THE SOFTWARE.
      */
 
-     /**
-      * Représente une ligne dans le code
-      */
-     class CodeWriterLine
-     {
-         public $content;
-         public $indent;
-         
-         public function __construct($content = '', $indent = 0)
-         {
-             $this->content = $content;
-             $this->indent = $indent;
-         }
-     }
-     
     /**
      * Permet de stocker et d'écrire du code
      *
@@ -50,19 +35,22 @@
         const MODE_INSERT = 'i';
         // Mode réécriture
         const MODE_REPLACE = 'r';
-        
+
+        const EOF = null;
+        const BOF = 0;
+
         /**
          * contient le contenu de la ligne en cours
          * @var string
          */
         private $current = '';
-        
+
         /**
          * contient le numéro de la ligne en cours d'édition
          * null pour une nouvelle ligne
          */
-        private $index = null;
-        
+        private $index = self::EOF;
+
         /**
          * mode d'insertion des lignes
          */
@@ -81,6 +69,12 @@
         private $indent = 0;
 
         /**
+         * niveau d'indentation initial
+         * @var int
+         */
+        private $init_indent = 0;
+
+        /**
          * caratère d'espacement
          * @var string
          */
@@ -93,7 +87,7 @@
         public function __construct($spacer = "\t", $initialIndent = 0)
         {
             $this->spacer = $spacer;
-            $this->indent = $initialIndent;
+            $this->indent = $this->init_indent = $initialIndent;
         }
 
         /**
@@ -154,26 +148,69 @@
             // On commence avec un tampon vide
             $this->clean();
         }
-        
+
         /**
          * Vide le contenu temporaire
          */
-        public function clean() 
+        public function clean()
         {
-            $this->clean();
+            $this->current = '';
         }
-        
+
         /**
          * Sélectionne un numéro de ligne en particulier
+         * Attention à valider le contenu du tampon avant de se déplacer.
          * @param int $index
          */
         public function select($index, $mode = self::MODE_REPLACE)
         {
             $this->mode = $mode;
-            if (isset($this->lines[$index]) {
-                $this->index = $index;
-                $this->clean();
+            if ($index !== self::EOF) {
+                if (isset($this->lines[$index])) {
+                    $this->index = $index;
+                } else {
+                    $this->index = self::EOF;
+                }
             }
+            // Mise à jour de l'indentation
+            if ($index === self::EOF) {
+                if (count($this->lines) > 0) {
+                    $this->indent = $this->getIndentLevel(end($this->lines));
+                } else {
+                    $this->indent = $this->init_indent;
+                }
+            } elseif ($index === self::BOF) {
+                $this->indent = $this->init_indent;
+            } else {
+                switch ($this->mode) {
+                    case self::MODE_INSERT:
+                        if ($index > 0 && isset($this->lines[$index-1])) {
+                            $this->indent = $this->getIndentLevel($this->lines[$index - 1]);
+                        } else {
+                            $this->indent = $this->getIndentLevel($this->lines[$index]);
+                        }
+                        break;
+                    case self::MODE_REPLACE:
+                        $this->indent = $this->getIndentLevel($this->lines[$index]);
+                        break;
+                    default:
+                        // Mode inconnu : a voir
+                        break;
+                }
+            }
+            $this->clean();
+        }
+
+        /**
+         * Récupère le niveau d'indentation pour la ligne indiquée
+         */
+        private function getIndentLevel($line = '')
+        {
+            for ($p = 0; $p < strlen($line); ++$p)
+            {
+               if ($line[$p] !== $this->spacer) break;
+            }
+            return $p;
         }
 
         /**
@@ -182,18 +219,25 @@
          */
         public function render() {
             if (strlen($this->current) > 0) $this->nl();
-            $ret = '';
-            foreach($this->lines as $line) {
-                $ret .= $line . "\n";
-            }
-            return $ret;
+            return implode("\n", $this->lines);
         }
 
+        /**
+          * Fusion avec le contenu d'un autre CodeWriter
+          */
         public function merge(CodeWriter $writer)
         {
             if (strlen($this->current) > 0) $this->nl();
             foreach ($writer->lines as $line) {
                 $this->lines[] = $line;
             }
+            return $this;
+        }
+
+        public function fromString($text)
+        {
+            $lines = explode("\n", $text);
+            $this->lines = $lines;
+            return $this;
         }
     }

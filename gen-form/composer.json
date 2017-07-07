@@ -1,0 +1,15 @@
+{
+    "name": "guedel/gen-form",
+    "description": "forms generator",
+    "type": "project",
+    "authors": [
+        {
+            "name": "guedel",
+            "email": "guedel87@live.fr"
+        }
+    ],
+    "require": {},
+  	"require-dev" : {
+		"guedel/microtest" : "*@dev"
+	}
+}

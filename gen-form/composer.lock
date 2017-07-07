@@ -1,0 +1,43 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5f019d41b7e7a0798967f2d9e93664e4",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "guedel/microtest",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "d:/srv/vendor/guedel/microtest/",
+                "reference": "669c7dd57f0148be3b47144748e83ce183a3d029"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "guedel\\Microtest\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "guedel",
+                    "email": "guedel87@live.fr"
+                }
+            ],
+            "description": "Unit test micro framework",
+            "time": "2016-09-07T17:24:42+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "guedel/microtest": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
