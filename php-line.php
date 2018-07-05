@@ -18,7 +18,16 @@
 <html>
 <head>
 <title>Console PHP</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/components/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="/components/codemirror/theme/monokai.css">
+    <script src="/components/codemirror/lib/codemirror.js"></script>
+    <script src="/components/codemirror/mode/xml/xml.js"></script>
+    <script src="/components/codemirror/mode/javascript/javascript.js"></script>
+    <script src="/components/codemirror/mode/css/css.js"></script>
+    <script src="/components/codemirror/mode/clike/clike.js"></script>
+    <script src="/components/codemirror/mode/php/php.js"></script>
+		
 <script type="text/javascript">
 	// Basé sur l'extrait de code trouvé à 
 	// http://www.javascriptsource.com/ajax/simple-ajax-by-jeff-manning-120613062001.html
@@ -87,8 +96,10 @@
 </head>
 <body>
 <form id="frmInput" method='get'>
+	<div style="width:65%">
 	<input type='button' onclick='btnclick()' value='Exécuter'/>
 	<p><textarea id="instr" name='instr' rows='10' cols='80'><?php echo $instr; ?></textarea></p>
+	</div>
 </form>
 <fieldset style='border: 1px solid red'>
 	<legend>Résultat</legend>
@@ -96,15 +107,34 @@
 	</div>
 </fieldset>
 <script type="text/javascript">
+
+  var editor = CodeMirror.fromTextArea(document.getElementById('instr'), {
+    lineNumbers: true,
+    matchBrackets: true,
+    //mode: "application/x-httpd-php", // pour du mélange php/html. Non supporté par l'interpréteur
+    mode: "text/x-php", // pour le code php pur
+    enterMode: "keep",
+    tabMode: "shift",
+    theme: "monokai",
+    smartindent: true
+  });
+
 	function btnclick() {
 		var http = new ajax('php-line.php');
+/*
 		var instr = document.getElementById("instr").value;
 		http.addParam('instr', instr );
+*/
+		http.addParam('instr', editor.doc.getValue() );
 		http.addParam('qry', true);
 		http.sendRequest( 'POST', function(response) {
-			var item = document.getElementById('result');
-			item.innerHTML = response;
-		});
+                var item = document.getElementById('result');
+                item.innerHTML = response;
+            },
+            function(code) {
+                alert("Erreur code " + code);
+            }
+        );
 	}
 </script>
 </body>
