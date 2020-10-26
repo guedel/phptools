@@ -172,8 +172,11 @@
 
     saveQuery = function(name, query) {
       var curDate = new Date();
-      // var key = "query-" + curDate.toLocaleString();
-      var key = "query-" + name;
+      if (name == null) {
+        var key = "query-" + curDate.toLocaleString();
+      } else {
+        var key = "query-" + name;
+      }
       var code = localStorage.getItem(key);
       localStorage.setItem(key, query);
       if (code !== null) {
@@ -208,15 +211,19 @@
 
     btnStore_click = function() {
       var query = editor.doc.getValue();
-      var name = document.getElementById('name').getAttribute('value');
-      saveQuery(name, query);
+      var name = document.getElementById('name');
+      var nameToUse = name.value;
+      saveQuery(nameToUse, query);
     };
 
     load_code = function(key) {
       var code = localStorage.getItem(key);
       if (code !== null) {
         var name = document.getElementById('name');
-        name.setAttribute('value', key.substr(6));
+        if (key == 'last-query') {
+        } else {
+          name.value = key.substr(6)
+        }
         editor.doc.setValue(code);
       }
     };
