@@ -1,0 +1,63 @@
+<html>
+<header>
+	<title>Assistant formulaire</title>
+</header>
+<body>
+	<form method="post" name="frmWizard" id="frmWizard">
+	<input type="hidden" name="etape" value="1" />
+	<table>
+	  <tr><td></td><td>
+Authentification	 </td></tr>
+    <tr>
+      <td><label for="">Système</label></td>
+      <td><select id="system" name="driver">
+<option selected='selected' value=''>veuillez choisir</option>
+<option value='mysql'>MySql</option>
+<option value='sqlite'>Sqlite</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+        <td><label for="">Nom de l'hôte</label></td>
+        <td><input type="text" id="hote" name="hote" size="64" value="localhost" /></td>
+    </tr>
+    <tr>
+        <td><label for="">Numéro de port</label></td>
+        <td><input type="text" id="port" name="port" size="20" value="" /></td>
+    </tr>
+    <tr>
+        <td><label for="">Nom d'utilisateur</label></td>
+        <td><input type="text" id="user_name" name="user_name" value="" size="64" /></td>
+    </tr>
+    <tr>
+        <td><label for="">Mot de passe</label></td>
+        <td><input type="password" id="password" name="password" value="" size="64" /></td>
+    </tr>
+<tr>
+    <td><input type="hidden" id="database" name="database" value="" /></td>
+</tr>
+    <tr style="">
+        <td>
+            <input name="table_select" type="hidden" value=""/>
+            <input name="requete" type="hidden" value=""/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+    </tr>
+    <tr><td>
+        <input type="hidden" name="rendering" value="simple" />
+    </td></tr>
+    <tr>
+        <td><input name="mode_gen" type="hidden" value="HTML" /></td>
+    </tr>
+		<tr><td></td><td>
+			<input type="submit" value="Actualise" name="actualise"/>
+			<input type="submit" value="Suivant" name="suivant"/>
+		</td></tr>
+
+	</table>
+	</form>
+</body>
+</html>
