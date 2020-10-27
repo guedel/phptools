@@ -113,7 +113,8 @@
          * Restitution du code
          * @returns string
          */
-        public function render() {
+        public function render() 
+        {
             if (strlen($this->current) > 0) $this->nl();
             $ret = '';
             foreach($this->lines as $line) {
@@ -122,6 +123,9 @@
             return $ret;
         }
 
+        /**
+         * Ajout du code de celui déjà fourni
+         */
         public function merge(CodeWriter $writer)
         {
             if (strlen($this->current) > 0) $this->nl();

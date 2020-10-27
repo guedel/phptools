@@ -1,82 +1,82 @@
 /* 
- Paramètres qui influencent le rendu
+ ParamÃ¨tres qui influencent le rendu
  - formulaire simple
- - édition en tableau
+ - Ã©dition en tableau
  
- - destination: client HTML, traitement PHP, Twig, base de données...
+ - destination: client HTML, traitement PHP, Twig, base de donnÃ©es...
 */
 paquet librairie
-début
+dÃ©but
 	interface IOptionVisiteur
-	début
-		procédure visiteOption(a: Option)
+	dÃ©but
+		procÃ©dure visiteOption(a: Option)
 	fin
 
 	interface IWidgetVisiteur
-	début
-		procédure visiteWidget(w : Widget)
+	dÃ©but
+		procÃ©dure visiteWidget(w : Widget)
 	fin
 
 	interface IControleVisiteur
-	début
-		procédure visiteControle(c: Controle)
+	dÃ©but
+		procÃ©dure visiteControle(c: Controle)
 	fin
 
 	{abstrait}
-	classe SourceDonnées
-	début
-		{privée}
-		// Objet de connexion à la base
+	classe SourceDonnÃ©es
+	dÃ©but
+		{privÃ©e}
+		// Objet de connexion Ã  la base
 		var cnx : PDO
 
 		{public}
-		constructeur SourceDonnées(cnx : PDO)
-		début
+		constructeur SourceDonnÃ©es(cnx : PDO)
+		dÃ©but
 			ceci.cnx = cnx
 		fin
 	fin
 
 
-	// Représente un champ dans une table ou une requête
+	// ReprÃ©sente un champ dans une table ou une requÃªte
 	// On y associe 1 champ <=> 1 controle
 	classe Champ
-	début
+	dÃ©but
 		{publique}
-		// Données provenant de la table
+		// DonnÃ©es provenant de la table
 		var id : entier
 		var nom: chaine
 		var typeC: chaine
-		var longueur, précision: entier
+		var longueur, prÃ©cision: entier
 		
-		// Données saisies
+		// DonnÃ©es saisies
 		var libelle: chaine
-		var selectionné: booléen = faux
+		var selectionnÃ©: boolÃ©en = faux
 		var controle : Controle
 		
 		{public}
 		constructeur Champ(id: entier, name: chaine, typeC: chaine, len: entier, prec: entier)
-		début
+		dÃ©but
 			ceci.id = id
 			ceci.nom = name
 			ceci.typeC = typeC
 			ceci.longueur = len
-			ceci.précision = prec
+			ceci.prÃ©cision = prec
 			
-			// Par défaut : Textbox
+			// Par dÃ©faut : Textbox
 			ceci.controle = instancie ControleTextbox()
 		fin
 		
 		fonction accepte(visiteur: IChampVisiteur)
-		début
+		dÃ©but
 			visiteur.visiteChamp(ceci)
 		fin
 	fin
 
 	classe Option
-	début
-		// Types de données supportées par l'attribut
+	dÃ©but
+		// Types de donnÃ©es supportÃ©es par l'attribut
 		enumeration TypeOption
-		début
+		dÃ©but
 			'enum'
 			'int'
 			'bool'
@@ -88,23 +88,23 @@ début
 
 		/// Le nom de l'attribut
 		var nom : chaine
-		/// Le libellé à afficher
+		/// Le libellÃ© Ã  afficher
 		var label: chaine
-		/// Le type de donnée stocké par l'attribut
+		/// Le type de donnÃ©e stockÃ© par l'attribut
 		var typeA: TypeOption 
 		/// Visible ou non 
 		var visible: booleen
-		/// Données complémentaires
+		/// DonnÃ©es complÃ©mentaires
 		var extra: chaine
 		/// La valeur est requise
 		var requis: booleen
-		/// Valeur par défaut
+		/// Valeur par dÃ©faut
 		var defaut: quelconque
-		/// La valeur stockée
+		/// La valeur stockÃ©e
 		var valeur: quelconque
 		
-		constructeur Option(nom, label: chaine, typeA: TypeOption, visible: booléen = vrai, extra: chaine = null, requis: booleen = faux, defaut : quelconque = null)
-		début
+		constructeur Option(nom, label: chaine, typeA: TypeOption, visible: boolÃ©en = vrai, extra: chaine = null, requis: booleen = faux, defaut : quelconque = null)
+		dÃ©but
 			ceci.nom = nom
 			ceci.label = label
 			ceci.typeA = typeA
@@ -116,114 +116,114 @@ début
 		fin
 		
 		fonction getHtmlName(owner: chaine, index: quelconque = null)
-		début
+		dÃ©but
 			si index est null alors
-				retourne concatène(owner, '_attr_', mon.nom)
-			retourne  concatène(owner, '_attr_', mon.nom, '[', index, ']')
+				retourne concatÃ¨ne(owner, '_attr_', mon.nom)
+			retourne  concatÃ¨ne(owner, '_attr_', mon.nom, '[', index, ']')
 		fin
 		
-		procédure storeHtmlValue(owner: chaine, index: quelconque)
-		début
-			écrire '<input type="hidden" name="' + mon.getHtmlName(owner, index) + '" value="' + ceci.valeur + '" />'
+		procÃ©dure storeHtmlValue(owner: chaine, index: quelconque)
+		dÃ©but
+			Ã©crire '<input type="hidden" name="' + mon.getHtmlName(owner, index) + '" value="' + ceci.valeur + '" />'
 		fin
 		
-		procédure accepte(v :IOptionVisiteur)
-		début
+		procÃ©dure accepte(v :IOptionVisiteur)
+		dÃ©but
 			v.VisiteOption ceci
 		fin
 	fin
 
 	{abstraite}
 	classe Widget 
-	début
-		{privé}
+	dÃ©but
+		{privÃ©}
 		var listeOptions: Collection<chaine, Option>
 		
 		{publique}
 		constructeur Widget()
-		début
+		dÃ©but
 		  ceci.initListeOptions()
 		fin
 
-		// Procédure de création des attributs nécessaires au contrôle
-		{protégée}
+		// ProcÃ©dure de crÃ©ation des attributs nÃ©cessaires au contrÃ´le
+		{protÃ©gÃ©e}
 		procedure initListeOptions()
-		début
+		dÃ©but
 			ceci.ajouteOption instancie Option('id', 'Identifiant', 'string', vrai)
 		fin 
 		
-		{protégée}
-		procédure ajouteAttibut(a : Option)
-		début
-			ceci.listeOptions.insère a.nom, a
+		{protÃ©gÃ©e}
+		procÃ©dure ajouteAttibut(a : Option)
+		dÃ©but
+			ceci.listeOptions.insÃ¨re a.nom, a
 		fin
 		
 		{publique}
-		procédure accepte(v :IWidgetVisiteur)
-		début
+		procÃ©dure accepte(v :IWidgetVisiteur)
+		dÃ©but
 			v.visiteWidget ceci
 		fin
 	fin
 
-	// classe de base des contrôles
+	// classe de base des contrÃ´les
 	{abstraite}
-	classe Controle étend Widget
-	début
+	classe Controle Ã©tend Widget
+	dÃ©but
 		{publique}
 		var nom: chaine
 
 		constructeur Controle()
-		début
+		dÃ©but
 		fin
 
-		{protégée}
+		{protÃ©gÃ©e}
 		procedure initListeOptions()
-		début
+		dÃ©but
 			ceci.ajouteOption instancie Option('nom', 'Nom', 'string', vrai)
 		fin 
 
 		{publique}
-		procédure accepte(v: IControleVisiteur)
-		début
+		procÃ©dure accepte(v: IControleVisiteur)
+		dÃ©but
 			v.visiteControle ceci
 		fin
 	fin classe
 
 	/// Exemple de controle
-	classe ControlTextbox étend Controle
-	début
+	classe ControlTextbox Ã©tend Controle
+	dÃ©but
 	   procedure initListeOptions()
-	   début
+	   dÃ©but
 	   fin
 	fin
     
-    // paquet qui contient les opération de génération
-    paquet génération
-    début
+    // paquet qui contient les opÃ©ration de gÃ©nÃ©ration
+    paquet gÃ©nÃ©ration
+    dÃ©but
         // classe de base
         {abstraite}
-        classe BaseGénération
-        début
+        classe BaseGÃ©nÃ©ration
+        dÃ©but
             {publique}
-            procédure prépare();
-            procédure finalise();
-            procédure génèreWidget(widget: Widget);
+            procÃ©dure prÃ©pare();
+            procÃ©dure finalise();
+            procÃ©dure gÃ©nÃ¨reWidget(widget: Widget);
             /*
-            procédure génèreFormulaire(formulaire: Formulaire);
-            procédure génèreControle(controle: Controle);
-            procédure génèreOption(option: Option);
+            procÃ©dure gÃ©nÃ¨reFormulaire(formulaire: Formulaire);
+            procÃ©dure gÃ©nÃ¨reControle(controle: Controle);
+            procÃ©dure gÃ©nÃ¨reOption(option: Option);
             */
         fin
-    fin // paquet génération
+    fin // paquet gÃ©nÃ©ration
 fin // paquet librairie
 	
 algorithme gestionnaire
-début
+dÃ©but
 	importe librairie.*
 
 	classe SortieCode
-	début
-		{privé}
+	dÃ©but
+		{privÃ©}
 		var courant : chaine = ''
 		var lignes : tableau de chaine
 		var indent : entier = 0
@@ -231,54 +231,54 @@ début
 		
 		{public}
 		constructeur SortieCode(espacement: chaine = '\t', indent_initial: entier = 0)
-		début
+		dÃ©but
 			ceci.indent = indent_initial
 			ceci.espace = espacement
 		fin
 		
-		procédure indent()
-		début
+		procÃ©dure indent()
+		dÃ©but
 			ceci.indent = ceci.indent + 1
 		fin
 		
-		procédure unindent()
-		début
+		procÃ©dure unindent()
+		dÃ©but
 			si ceci.indent > 0 alors
 				ceci.indent = ceci.indent - 1
 		fin
 		
-		procédure écrire(t: chaine)
-		début
-			ceci.courant = concatène(ceci.courant, t)
+		procÃ©dure Ã©crire(t: chaine)
+		dÃ©but
+			ceci.courant = concatÃ¨ne(ceci.courant, t)
 		fin
 		
-		procédure écrire_nl(t: chaine)
-		début
-			ceci.écrire(t)
+		procÃ©dure Ã©crire_nl(t: chaine)
+		dÃ©but
+			ceci.Ã©crire(t)
 			ceci.nl()
 		fin
 		
-		procédure nl()
-		début
-			ceci.lignes.ajoute concatène(ceci.espace * ceci.indent, ceci.courant) 
+		procÃ©dure nl()
+		dÃ©but
+			ceci.lignes.ajoute concatÃ¨ne(ceci.espace * ceci.indent, ceci.courant) 
 			ceci.courant = ''
 		fin
 		
 		fonction rendu(): chaine
-		début
+		dÃ©but
 			var ret: chaine = ''
 			var l : chaine
 			si longueurChaine(ceci.courant) > 0 alors 
 				nl()
 			pour chaque l dans ceci.lignes faire
-			début
-				ret = concatène(ret, l)
+			dÃ©but
+				ret = concatÃ¨ne(ret, l)
 			fin
 			retourne ret
 		fin
 		
 		procedure fusion(s: SortieCode)
-		début
+		dÃ©but
 			si longueurChaine(ceci.courant) > 0 alors 
 				nl()
 			var l : chaine
@@ -287,68 +287,68 @@ début
 		fin
 	fin
 
-	classe Gestionnaire implémente IWidgetVisiteur, IControleVisiteur
-	début
-		typedef signatureGénérateur = procédure(c : Controle, f: SortieCode)
+	classe Gestionnaire implÃ©mente IWidgetVisiteur, IControleVisiteur
+	dÃ©but
+		typedef signatureGÃ©nÃ©rateur = procÃ©dure(c : Controle, f: SortieCode)
 		
-		{privé}
-		var registre : Collection<chaine, signatureGénérateur>
+		{privÃ©}
+		var registre : Collection<chaine, signatureGÃ©nÃ©rateur>
 
 		{publique}
-		procédure inscriptionGénérateur(nomControle: chaine, m : signatureGénérateur))
-		début
-			ceci.registre.insère nomControle, m
+		procÃ©dure inscriptionGÃ©nÃ©rateur(nomControle: chaine, m : signatureGÃ©nÃ©rateur))
+		dÃ©but
+			ceci.registre.insÃ¨re nomControle, m
 		fin
 		
 		{publique}
-		procédure générationControle(c : Controle, f: SortieCode)
-		début
+		procÃ©dure gÃ©nÃ©rationControle(c : Controle, f: SortieCode)
+		dÃ©but
 			var nom : chaine
-			var f : signatureGénérateur
+			var f : signatureGÃ©nÃ©rateur
 			
 			pour chaque <nom, f> dans ceci.registre faire
-			début
+			dÃ©but
 				si nom == nom_de_type(c) alors
 					f.invoque(c, f)
 			fin
 		fin
 	fin
 	
-	// Exemple de code pour générer le code HTML pour une textbox
-	procédure gen_html_textbox(c : ControlTextbox, f: SortieCode)
-	début
-		// Génération du code HTML pour une textbox
+	// Exemple de code pour gÃ©nÃ©rer le code HTML pour une textbox
+	procÃ©dure gen_html_textbox(c : ControlTextbox, f: SortieCode)
+	dÃ©but
+		// GÃ©nÃ©ration du code HTML pour une textbox
 		var t : chaine 
 			= format('<input type="text" value="%1" id="%2" name="%3" />',
 			c.valeur, c.id, c.nom)
-		f.écrire t
+		f.Ã©crire t
 	fin
 	
-	procédure test()
-	début
-		var g : Générateur = instancie Générateur()
-		g.inscriptionGénérateur "ControlTextbox", gen_html_textbox
+	procÃ©dure test()
+	dÃ©but
+		var g : GÃ©nÃ©rateur = instancie GÃ©nÃ©rateur()
+		g.inscriptionGÃ©nÃ©rateur "ControlTextbox", gen_html_textbox
 	fin
 	
 	{abstraite}
-	classe GénérateurCode
-	début
+	classe GÃ©nÃ©rateurCode
+	dÃ©but
 		{public}
-		constructeur GénérateurCode(g: Gestionnaire)
-		début
+		constructeur GÃ©nÃ©rateurCode(g: Gestionnaire)
+		dÃ©but
 		fin
 		
-		// Génération de la partie IHM
+		// GÃ©nÃ©ration de la partie IHM
 		{publique, abstraite, statique}
-		fonction génèreVue(sortie: SortieCode, widget: Widget) : SortieCode;
+		fonction gÃ©nÃ¨reVue(sortie: SortieCode, widget: Widget) : SortieCode;
 
-		// Génération de la partie modèle
+		// GÃ©nÃ©ration de la partie modÃ¨le
 		{publique, abstraite, statique}
-		fonction génèreModèle(sortie: SortieCode, widget: Widget) : SortieCode;
+		fonction gÃ©nÃ¨reModÃ¨le(sortie: SortieCode, widget: Widget) : SortieCode;
 
-		// Génération de la partie controleur
+		// GÃ©nÃ©ration de la partie controleur
 		{publique, abstraite, statique}
-		fonction génèreContrôleur(sortie: SortieCode, widget: Widget) : SortieCode;
+		fonction gÃ©nÃ¨reContrÃ´leur(sortie: SortieCode, widget: Widget) : SortieCode;
 		
 	fin
 fin

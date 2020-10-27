@@ -47,6 +47,7 @@
             }
         } else {
             if ($cnx !== null) {
+                $cnx->exec('USE ' . $databasename);
                 $cmdTables = $cnx->query("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$databasename'");
             }
         }

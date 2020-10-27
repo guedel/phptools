@@ -45,7 +45,7 @@
             $render->nl();
             $render->indent();
             $render->write(sprintf('<textarea id="%s" name="%s">', $this->id, $this->name));
-            $render->write($this->Options['default']->value);
+            //$render->write($this->default->value);
             $render->writeln('</textarea>');
             $render->unindent();
         }
