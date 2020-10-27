@@ -97,9 +97,9 @@
 <body>
 <form id="frmInput" method='get'>
   <div style="width:75%">
-    <input type='button' onclick='btnExec_click()' value='Exécuter'/>
-    <input type="button" onclick="btnClear_click()" value="Effacer" />
-    <input type="button" onclick="btnStore_click()" value="Sauver" />
+    <input id="btnExec" type='button' value='Exécuter'/>
+    <input id="btnClear" type="button" value="Effacer" />
+    <input id="btnStore" type="button" value="Sauver" />
     <p>
     <label>Nom: </label><input type="text" id="name" style="width: 80em"/>
     </p>
@@ -109,7 +109,7 @@
   <div>
     <ul id="last_queries">
     </ul>
-    <input type="button" value="Vider" onclick="clearList()" />
+    <input id="btnEmpty" type="button" value="Vider" />
   </div>
 
 </form>
@@ -143,6 +143,11 @@
         addToQueriesList(key, localStorage.getItem(key));
       }
     }
+
+    document.getElementById('btnExec').addEventListener('click', btnExec_click);
+    document.getElementById('btnClear').addEventListener('click', btnClear_click);
+    document.getElementById('btnStore').addEventListener('click', btnStore_click);
+    document.getElementById('btnEmpty').addEventListener('click', clearList);
   }
 
 	btnExec_click = function() {
@@ -172,7 +177,7 @@
 
     saveQuery = function(name, query) {
       var curDate = new Date();
-      if (name == null) {
+      if (name.length == 0) {
         var key = "query-" + curDate.toLocaleString();
       } else {
         var key = "query-" + name;
@@ -187,10 +192,15 @@
       }
     };
 
+    onLoadCode = function(evt) {
+      load_code(evt.currentTarget.id);
+    }
+
     addToQueriesList = function(key, query) {
       var list = document.getElementById('last_queries');
       var elt = document.createElement('li');
-      elt.setAttribute('onClick', 'load_code("' + key + '")');
+      // elt.setAttribute('onClick', 'load_code("' + key + '")');
+      elt.addEventListener('click', onLoadCode);
       elt.setAttribute('id', key);
       if (key.substr(0, 5) === 'query') {
         key = key.substr(6);
