@@ -11,6 +11,6 @@
     "require": {},
   	"require-dev" : {
 		"guedel/microtest" : "*@dev",
-        "codeception/codeception": "^2.4"
+        "codeception/codeception": "^3.1"
 	}
 }
