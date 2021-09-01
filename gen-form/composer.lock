@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "5f019d41b7e7a0798967f2d9e93664e4",
@@ -12,15 +12,32 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "d:/srv/vendor/guedel/microtest/",
-                "reference": "669c7dd57f0148be3b47144748e83ce183a3d029"
+                "url": "https://gitlab.com/guedel87/microtest.git",
+                "reference": "b8ce9fa43d2a2020d0e47b0c7c55ecb3e0388c65"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/guedel87%2Fmicrotest/repository/archive.zip?sha=b8ce9fa43d2a2020d0e47b0c7c55ecb3e0388c65",
+                "reference": "b8ce9fa43d2a2020d0e47b0c7c55ecb3e0388c65",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "7"
+            },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "guedel\\Microtest\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
                     "name": "guedel",
@@ -28,7 +45,10 @@
                 }
             ],
             "description": "Unit test micro framework",
-            "time": "2016-09-07T17:24:42+00:00"
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/3611165/issues"
+            },
+            "time": "2021-03-16T19:13:56+00:00"
         }
     ],
     "aliases": [],
@@ -39,5 +59,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
 }

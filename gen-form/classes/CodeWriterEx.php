@@ -83,6 +83,7 @@
         /**
          *
          * @param string $spacer
+         * @param int $initialIndent
          */
         public function __construct($spacer = "\t", $initialIndent = 0)
         {
@@ -161,8 +162,9 @@
          * Sélectionne un numéro de ligne en particulier
          * Attention à valider le contenu du tampon avant de se déplacer.
          * @param int $index
+         * @param int $mode Mode d'édition de la ligne au moment de la sélection
          */
-        public function select($index, $mode = self::MODE_REPLACE)
+        public function select($index, $mode = self::MODE_INSERT)
         {
             $this->mode = $mode;
             if ($index !== self::EOF) {
@@ -224,6 +226,7 @@
 
         /**
           * Fusion avec le contenu d'un autre CodeWriter
+         * @param \CodeWrite $writer Source à ajouter
           */
         public function merge(CodeWriter $writer)
         {
@@ -234,6 +237,11 @@
             return $this;
         }
 
+        /**
+         * Chargement d'un source
+         * @param string $text
+         * @return $this
+         */
         public function fromString($text)
         {
             $lines = explode("\n", $text);
