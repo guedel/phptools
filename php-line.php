@@ -97,24 +97,19 @@
 <body>
 <form id="frmInput" method='get'>
   <div style="width:75%">
-    <input type='button' onclick='btnExec_click()' value='Exécuter'/>
-    <input type="button" onclick="btnClear_click()" value="Effacer" />
-    <input type="button" onclick="btnStore_click()" value="Sauver" />
-    <!--
-    <div id="store_list">
-      <ol>
-        <li><a onclick="load_code()">Sample 1</a></li>
-        <li><a onclick="load_code()">Sample 2</a></li>
-      </ol>
-    </div>
-    -->
+    <input id="btnExec" type='button' value='Exécuter'/>
+    <input id="btnClear" type="button" value="Effacer" />
+    <input id="btnStore" type="button" value="Sauver" />
+    <p>
+    <label>Nom: </label><input type="text" id="name" style="width: 80em"/>
+    </p>
     <p><textarea id="instr" name='instr' rows='50' cols='180'><?php echo $instr; ?></textarea></p>
   </div>
 
   <div>
     <ul id="last_queries">
     </ul>
-    <input type="button" value="Vider" onclick="clearList()" />
+    <input id="btnEmpty" type="button" value="Vider" />
   </div>
 
 </form>
@@ -148,6 +143,11 @@
         addToQueriesList(key, localStorage.getItem(key));
       }
     }
+
+    document.getElementById('btnExec').addEventListener('click', btnExec_click);
+    document.getElementById('btnClear').addEventListener('click', btnClear_click);
+    document.getElementById('btnStore').addEventListener('click', btnStore_click);
+    document.getElementById('btnEmpty').addEventListener('click', clearList);
   }
 
 	btnExec_click = function() {
@@ -175,33 +175,65 @@
      localStorage.setItem("last-query", query);
     };
 
-    saveQuery = function(query) {
+    saveQuery = function(name, query) {
       var curDate = new Date();
-      var key = "query-" + curDate.toLocaleString();
+      if (name.length == 0) {
+        var key = "query-" + curDate.toLocaleString();
+      } else {
+        var key = "query-" + name;
+      }
+      var code = localStorage.getItem(key);
       localStorage.setItem(key, query);
-      addToQueriesList(key, query);
+      if (code !== null) {
+      // s'il existe déjà: remplacement
+        updateQueriesList(key, query);
+      } else {
+        addToQueriesList(key, query);
+      }
     };
+
+    onLoadCode = function(evt) {
+      load_code(evt.currentTarget.id);
+    }
 
     addToQueriesList = function(key, query) {
       var list = document.getElementById('last_queries');
       var elt = document.createElement('li');
-      elt.setAttribute('onClick', 'load_code("' + key + '")');
+      // elt.setAttribute('onClick', 'load_code("' + key + '")');
+      elt.addEventListener('click', onLoadCode);
+      elt.setAttribute('id', key);
       if (key.substr(0, 5) === 'query') {
         key = key.substr(6);
       }
-      var txt = key + ':' + query.substr(0, 80);
+      var txt = key + ':' + query.substr(0, 40);
       elt.innerText = txt;
       list.appendChild(elt);
     };
+    
+    updateQueriesList = function(key, query) {
+      var elt = document.getElementById(key);
+      if (key.substr(0, 5) === 'query') {
+        key = key.substr(6);
+      }
+      var txt = key + ':' + query.substr(0, 40);
+      elt.innerText = txt;
+    }
 
     btnStore_click = function() {
       var query = editor.doc.getValue();
-      saveQuery(query);
+      var name = document.getElementById('name');
+      var nameToUse = name.value;
+      saveQuery(nameToUse, query);
     };
 
     load_code = function(key) {
       var code = localStorage.getItem(key);
       if (code !== null) {
+        var name = document.getElementById('name');
+        if (key == 'last-query') {
+        } else {
+          name.value = key.substr(6)
+        }
         editor.doc.setValue(code);
       }
     };
